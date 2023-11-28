@@ -1,3 +1,2 @@
-# Houses-R-Us
-
-An Airbnb with limited functionality.
+# Vision Demo App
+An enterprise vacation property rental application. 
