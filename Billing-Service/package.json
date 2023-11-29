@@ -1,11 +1,9 @@
 {
-  "name": "inventory-service",
+  "name": "billing-service",
   "version": "1.0.0",
-  "description": "Performs inventory services for Houses-R-Us",
-  "main": "index.js",
-  "exports": "./index.js",
+  "description": "Performs billing services for Houses-R-Us",
   "scripts": {
-    "start": "NODE_ENV=production node server/inventoryServer.js",
+    "start": "NODE_ENV=production node server/billingServer.js",
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon server/server.js",
     "test": "jest --verbose"
