@@ -1,6 +1,6 @@
 import React from "react";
 import Details from "./Details.jsx"
-import Images from "./Images/jsx"
+import Images from "./Images.jsx"
 
 
 const Listing = () => {

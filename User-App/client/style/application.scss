@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#main-container {
+    border: 1px solid orange;
+    height: 100vh;
+}
+
+#header {
+    border: 1px solid orange;
+        height: 10vh;
+}
+
+#home {
+    border: 3px solid blue;
+    height: 90vh;
+}
+
+#search {
+    border: 3px solid pink;
+    height: 90vh;
+}
+
+.listing {
+    border: 3px solid green;
+    height: 90vh;
+}
