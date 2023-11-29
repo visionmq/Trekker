@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.AUTH_PORT
 require('dotenv').config()
-
+const hello = 'hi'
 const mongoURI = process.env.MONGO_URI_USERS
 
 mongoose.connect(mongoURI);
