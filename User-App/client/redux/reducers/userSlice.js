@@ -13,10 +13,10 @@ export const userSlice = createSlice({
     updateCurrentUser: (state, action) => {
       const user = action.userInfo;
       state.currentUser = user;
-    }
+    },
   },
 });
 
-export const { loggedIn, updateCurrentUser} = bookingSlice.actions;
+export const { loggedIn, updateCurrentUser } = userSlice.actions;
 
 export default userSlice.reducer;

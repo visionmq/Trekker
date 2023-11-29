@@ -23,6 +23,10 @@ export const propertySlice = createSlice({
   },
 });
 
-export const { updateAvailableDates, updatePropertyLocation, updatePropertyName } = bookingSlice.actions;
+export const {
+  updateAvailableDates,
+  updatePropertyLocation,
+  updatePropertyName,
+} = propertySlice.actions;
 
 export default propertySlice.reducer;

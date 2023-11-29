@@ -46,7 +46,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Webpack Dev',
       filename: 'index.html',
-      template: 'client/index.html',
+      template: './index.html',
     }),
   ],
 };
