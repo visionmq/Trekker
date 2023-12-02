@@ -16,9 +16,9 @@ mongoose.connection.once('open', () => {
 
 app.use(express.json());
 
-app.post('/newListing', propertyController.addProperty, (req, res) => {
-    return res.status(200).send('property added')
-})
+app.post('/newListing', propertyController.addProperty, (req, res, next) => {
+    res.status(200).send('property added')
+});
 
 app.use((req, res, err, next) => {
     const defaultError = {
