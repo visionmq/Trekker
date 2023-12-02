@@ -3,7 +3,7 @@ let globalWs;
 
 const exchangeName = 'trekker_topic';
 
-export const receiveMsg = async () => {
+const receiveMsg = async () => {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
   await channel.assertExchange(exchangeName, 'topic', { durable: true });
@@ -28,6 +28,8 @@ export const receiveMsg = async () => {
     }
   );
 };
+
+module.exports = receiveMsg;
 
 /**
  * Web Socket

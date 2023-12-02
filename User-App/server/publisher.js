@@ -2,7 +2,7 @@ const amqp = require('amqplib');
 
 const exchangeName = 'trekker_topic';
 
-export const sendMsg = async (key, msgObj) => {
+const sendMsg = async (key, msgObj) => {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
   await channel.assertExchange(exchangeName, 'topic', { durable: true });
@@ -15,3 +15,5 @@ export const sendMsg = async (key, msgObj) => {
     // process.exit(0);
   }, 500);
 };
+
+module.exports = sendMsg;
