@@ -16,7 +16,6 @@ export const receiveMsg = async () => {
     (msg) => {
       const msgObj = JSON.parse(msg.content.toString());
       console.log(`[x] App received: ${msgObj}`);
-      //  fetch(msg.content.toString();
     },
     {
       noAck: true,
