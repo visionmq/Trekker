@@ -15,7 +15,9 @@ mongoose.connection.once('open', () => {
 
 app.use(express.json());
 
+app.post('/login', signUpController, async (req, res) => {
 
+  });
 
 app.use((req, res, err, next) => {
     const defaultError = {
