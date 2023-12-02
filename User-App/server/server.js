@@ -5,6 +5,9 @@ const PORT = 3000;
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
+const sendMsg = require('./publisher');
+const receiveMsg = require('./consumer');
+
 const corsOptions = {
   origin: 'http://localhost:8080',
   credentials: true,
@@ -16,6 +19,15 @@ app.use(cookieParser());
 
 //serves files for the webpack
 app.use('/build', express.static(path.join(__dirname, '../build')));
+
+//functional endpoints
+app.post('/login', async (req, res) => {
+  const routingKey = 'Auth';
+  const msg = req.body.messsage;
+  await sendMsg(routingKey, msg);
+  await receiveMsg(); //?? is this the way to do it maybe make a websocket
+  res.send('');
+});
 
 //used for serving the application
 app.use('/', (req, res) => {
