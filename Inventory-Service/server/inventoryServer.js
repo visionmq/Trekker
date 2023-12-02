@@ -15,6 +15,11 @@ mongoose.connection.once('open', () => {
 
 app.use(express.json());
 
+app.post('/checkInv',(req,res) => {
+    req.body
+})
+
+app.post('/updateInv')
 
 app.listen(PORT, () => {
     console.log(`server listening on port ${PORT}`);
