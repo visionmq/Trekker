@@ -23,7 +23,8 @@
     "dotenv": "^16.3.1",
     "dotenv-webpack": "^8.0.1",
     "express": "^4.12.3",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "mongodb": "^6.2.0",
