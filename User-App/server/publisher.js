@@ -12,6 +12,6 @@ export const sendMsg = async (key, msgObj) => {
 
   setTimeout(() => {
     connection.close();
-    process.exit(0);
-  }, 500)
+    // process.exit(0);
+  }, 500);
 };
