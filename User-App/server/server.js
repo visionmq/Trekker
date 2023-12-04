@@ -31,16 +31,18 @@ app.post('/inv', async (req, res) => {
   res.send();
 });
 
-//rabbitMQ endpoint (if ws isnt implemented in consumer.js)
+//rabbitMQ endpoint for testing websocket
 
-// app.use('/rabbit', (req, res) => {
-//   //ws function
-//   res.send()
-// })
+app.post('/rabbit', async (req, res) => {
+  console.log('Sending to rabbit');
+  await sendMsg('App', req.body.messsage);
+  console.log('Rabbit message sent');
+  res.send();
+});
 
 //used for serving the application
 app.use('/', async (req, res) => {
-  await receiveMsg();
+  // await receiveMsg();
   res.status(200).sendFile(path.join(__dirname, '../index.html'));
 });
 
@@ -64,4 +66,33 @@ app.use((err, req, res, next) => {
 //connects the server to the port
 app.listen(3000, () => {
   console.log(`server listening on port ${PORT}`);
+});
+
+/**
+ * Web Socket
+ *
+ * It's possible that we just call the publisher.js sendMsg here
+ * so that we don't have to go thru the server
+ */
+
+const { WebSocketServer } = require('ws');
+const wsserver = new WebSocketServer({ port: 443 });
+
+wsserver.on('connection', async (ws) => {
+  // ws.session = { secret: 'Secret Info Here' };
+  ws.on('close', () => console.log('Client has disconnected!'));
+
+  ws.onerror = function (err) {
+    console.log('WEBSOCKET ERROR: ', err);
+  };
+
+  console.log('Websocket connected, turning on consumer');
+  await receiveMsg();
+  ws.send('Websocket working');
+
+  const socketSend = (msgObj) => {
+    ws.send(msgObj);
+
+    exports.module = socketSend;
+  };
 });
