@@ -4,19 +4,30 @@ const amqp = require('amqplib/callback_api');
 const exchangeName = 'trekker_topic';
 
 const sendMsg = async (key, msgObj) => {
-  console.log('trying to connect');
-  const connection = await amqp.connect('amqp://localhost');
-  console.log('connected!!', connection);
-  const channel = await connection.createChannel();
-  await channel.assertExchange(exchangeName, 'topic', { durable: true });
+  console.log('trying to connect: ', key, msgObj);
+  const connection = amqp.connect(
+    'amqp://localhost',
+    function (error, connection) {
+      // console.log('connected!!', connection);
+      if (error) console.log(error);
+      // console.log('Connection established', connection);
 
-  channel.publish(exchangeName, key, Buffer.from(JSON.stringify(msgObj)));
-  console.log(`[x] App just sent: ${msgObj}`);
+      connection.createChannel(function (err, channel) {
+        // console.log('err', err, 'channel', channel);
+        channel.assertExchange(exchangeName, 'topic', { durable: true });
 
-  setTimeout(() => {
-    connection.close();
-    // process.exit(0);
-  }, 500);
+        channel.publish(exchangeName, key, Buffer.from(JSON.stringify(msgObj)));
+        console.log(`[x] App just sent: ${msgObj}`);
+
+        setTimeout(() => {
+          connection.close();
+          // process.exit(0);
+        }, 500);
+      });
+    }
+  );
 };
+
+// sendMsg('App', { message: 'Hello' });
 
 module.exports = sendMsg;
