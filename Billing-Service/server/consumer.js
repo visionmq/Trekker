@@ -1,14 +1,14 @@
 const amqp = require('amqplib');
 const billPublisher = require('./publisher');
 
-export const receive = async() => {
+const billConsume = async() => {
   const exchange = 'trekker_topic';
   try {
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
     await channel.assertExchange(exchange, 'topic', {durable: true})
   }
-  
+
   catch (err) {
     console.log(err.message);
   }
@@ -56,3 +56,5 @@ export const receive = async() => {
     console.log(err.message);
   }
 };
+
+module.exports = billConsume;

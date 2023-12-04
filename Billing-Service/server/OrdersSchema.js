@@ -1,10 +1,11 @@
+const mongoose = require('mongoose')
 require('dotenv').config()
 const mongoURI = process.env.MONGO_URI_BILLING
 mongoose.connect(mongoURI);
 const Schema = mongoose.Schema
 
 mongoose.connection.once('open', () => {
-    console.log('connected to the users DB by the users server')
+    console.log('connected to the orders DB by the Billing server')
 });
 
 const orders = new Schema({

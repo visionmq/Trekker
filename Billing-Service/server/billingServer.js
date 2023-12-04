@@ -1,10 +1,24 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const app = express();
-const PORT = process.env.BILLING_PORT
+require('dotenv').config()
+const PORT = process.env.BILLING_PORT;
 const Orders = require('./OrdersSchema');
+const billConsume = require('./consumer');
+const billPublisher = require('./publisher');
 
 app.use(express.json());
+
+// billConsume();
+// const msg = {
+//     method: 'attempt-charge',
+//     stage: 'pre-charge',
+//     body: {
+//         cardNum: '1111111111111111', 
+//         total: 123.50,
+//         user: {username: 'Cheri'},
+//     }
+// }
+// billPublisher('Bill', msg);
 
 app.use('/attempt-charge', async (req, res) => {
     const {cardNum, total, user} = req.body;
