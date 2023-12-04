@@ -7,7 +7,15 @@ const Header = () => {
     fetch('/rabbit', {
       method: 'POST',
       headers: {'Content-type': 'application/json'},
-      body: JSON.stringify({message: 'hello'})
+      body: JSON.stringify({message: {
+        method: 'attempt-charge',
+        status: 'pre-checkout',
+        body:{
+          cardNum: '',
+          total: '',
+          userName: '',
+        }
+      }})
     })
   }
 
