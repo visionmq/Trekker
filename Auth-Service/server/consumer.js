@@ -15,6 +15,8 @@ const receiveMsg = async () => {
   channel.consume(
     AuthQueue,
     async (msg) => {
+  const msgObj = msg.content.toString();
+           console.log(`[x] Auth received: ${msgObj}, now sending sending to switcher...`);
       switch(msg.method) {
         case 'signup':
           try{
@@ -62,3 +64,28 @@ const receiveMsg = async () => {
     }
   );
 };
+
+module.exports = receiveMsg
+// const amqp = require('amqplib/callback_api');
+// // const socketSend = require('./server');
+// const exchangeName = 'trekker_topic';
+//    amqp.connect('amqp://localhost',async function(err0,connection){
+//    connection.createChannel(async function(err1,channel){
+//   channel.assertExchange(exchangeName, 'topic', { durable: true });
+//        channel.assertQueue('AppQueue');
+//        channel.bindQueue('AppQueue', exchangeName, 'App');
+//        channel.bindQueue('AppQueue', exchangeName, '#.success');
+//        channel.consume(
+//          'AppQueue',
+//          (msg) => {
+//            const msgObj = msg.content.toString();
+//            console.log(`[x] App received: ${msgObj}, now sending thru websocket...`);
+//            //ws function
+//            // socketSend(msgObj); //send json back to fe via ws with instructions in body
+//          },
+//          {
+//            noAck: true,
+//          }
+//        );
+//      });
+//      });
