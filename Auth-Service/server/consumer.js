@@ -2,7 +2,8 @@ const amqp = require('amqplib');
 const sendMsg = require('./publisher.js')
 const exchangeName = 'trekker_topic';
 
-export const receiveMsg = async () => {
+
+const receiveMsg = async () => {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
   await channel.assertExchange(exchangeName, 'topic', { durable: true });
@@ -18,18 +19,42 @@ export const receiveMsg = async () => {
         case 'signup':
           try{
         const msgObj = JSON.parse(msg.content.toString());
-        console.log(`[x] App received: ${msgObj}`);
-        const data = await fetch({
-          method: POST,
+        console.log(`[x] Auth received: ${msgObj}`);
+        const data = await fetch('/signup', {
+          method: 'POST',
           body: msgObj
-        })//include the localhost
+        })
         sendMsg(key, data)
-        //import method from Authpublisher to send message with loginOutcome
       }
       catch (err){
         console.log(err.message)
       }
-        break
+        case 'signin':
+          try{
+        const msgObj = JSON.parse(msg.content.toString());
+        console.log(`[x] Auth received: ${msgObj}`);
+        const data = await fetch('/signin', {
+          method: 'POST',
+          body: msgObj
+        })
+        sendMsg(key, data)
+      }
+      catch (err){
+        console.log(err.message)
+      }
+      case 'checkout':
+          try{
+        const msgObj = JSON.parse(msg.content.toString());
+        console.log(`[x] Auth received: ${msgObj}`);
+        const data = await fetch('/checkout', {
+          method: 'POST',
+          body: msgObj
+        })
+        sendMsg(key, data)
+      }
+      catch (err){
+        console.log(err.message)
+      }
       }
     },
     {

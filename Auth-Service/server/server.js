@@ -2,21 +2,32 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
-const PORT = process.env.AUTH_PORT
 require('dotenv').config()
-const hello = 'hi'
-const mongoURI = process.env.MONGO_URI_USERS
+const PORT = process.env.AUTH_PORT//not working
+const mongoURI = process.env.MONGO_URI_USERS//not working
+const sendMsg = require('./publisher.js')
 
-mongoose.connect(mongoURI);
+mongoose.connect('mongodb+srv://Houses-R-Us:KIMVTjsFPqWXOSzc@houses-r-us-users.o0ujl8u.mongodb.net/?retryWrites=true&w=majority');
 
 mongoose.connection.once('open', () => {
-    console.log('connected to the users DB by the users server')
+    console.log('user database online')
 });
+
+const controller = require('./controllers/authController.js')
 
 app.use(express.json());
 
-app.post('/login', signUpController, async (req, res) => {
-
+app.post('/signin', controller.signin, (req, res) => {
+    sendMsg('App', res.locals.msg)
+    res.status(200).send('complete')
+  });
+app.post('/signup', controller.signup, (req, res) => {
+    sendMsg('App', res.locals.msg)
+    res.status(200).send('complete')
+  });
+app.post('/checkout', controller.checkout, (req, res) => {
+    sendMsg('App', res.locals.msg)
+    res.status(200).send('complete')
   });
 
 app.use((req, res, err, next) => {
@@ -29,7 +40,7 @@ app.use((req, res, err, next) => {
     res.status(errObj.status).json(errObj.message)
 });
 
-app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`)
+app.listen(4000, () => {
+    console.log(`listening on port 4000`)
 });
 
