@@ -1,9 +1,12 @@
-const amqp = require('amqplib');
+const amqp = require('amqplib/callback_api');
+// const { connect } = require('react-redux');
 
 const exchangeName = 'trekker_topic';
 
-export const sendMsg = async (key, msgObj) => {
+const sendMsg = async (key, msgObj) => {
+  console.log('trying to connect');
   const connection = await amqp.connect('amqp://localhost');
+  console.log('connected!!', connection);
   const channel = await connection.createChannel();
   await channel.assertExchange(exchangeName, 'topic', { durable: true });
 
@@ -15,3 +18,5 @@ export const sendMsg = async (key, msgObj) => {
     // process.exit(0);
   }, 500);
 };
+
+module.exports = sendMsg;

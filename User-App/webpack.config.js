@@ -41,6 +41,11 @@ module.exports = {
     open: true,
     hot: true,
     compress: true,
+    proxy: {
+      '/rabbit': 'http://localhost:3000',
+      '/auth': 'http://localhost:3000',
+      '/inv': 'http://localhost:3000',
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
