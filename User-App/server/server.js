@@ -8,11 +8,11 @@ const cookieParser = require('cookie-parser');
 const sendMsg = require('./publisher');
 const receiveMsg = require('./consumer');
 
-const corsOptions = {
-  origin: 'http://localhost:8080',
-  credentials: true,
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: 'http://localhost:8080',
+//   credentials: true,
+// };
+// app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -35,7 +35,8 @@ app.post('/inv', async (req, res) => {
 
 app.post('/rabbit', async (req, res) => {
   console.log('Sending to rabbit');
-  await sendMsg('App', req.body.messsage);
+  console.log(req.body);
+  await sendMsg('App', req.body.message);
   console.log('Rabbit message sent');
   res.send();
 });
@@ -64,8 +65,9 @@ app.use((err, req, res, next) => {
 });
 
 //connects the server to the port
-app.listen(3000, () => {
-  console.log(`server listening on port ${PORT}`);
+app.listen(3000, async () => {
+  console.log(`Server listening on port ${PORT}`);
+  receiveMsg();
 });
 
 /**
@@ -77,6 +79,7 @@ app.listen(3000, () => {
 
 const { WebSocketServer } = require('ws');
 const wsserver = new WebSocketServer({ port: 443 });
+// let socketSend;
 
 wsserver.on('connection', async (ws) => {
   // ws.session = { secret: 'Secret Info Here' };
@@ -87,12 +90,10 @@ wsserver.on('connection', async (ws) => {
   };
 
   console.log('Websocket connected, turning on consumer');
-  await receiveMsg();
   ws.send('Websocket working');
 
   const socketSend = (msgObj) => {
     ws.send(msgObj);
-
-    exports.module = socketSend;
   };
+  module.exports = socketSend;
 });
