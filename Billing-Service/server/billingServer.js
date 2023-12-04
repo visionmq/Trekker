@@ -1,19 +1,34 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
 const app = express();
 const PORT = process.env.BILLING_PORT
-require('dotenv').config()
-
-const mongoURI = process.env.MONGO_URI_USERS
-
-mongoose.connect(mongoURI);
-
-mongoose.connection.once('open', () => {
-    console.log('connected to the users DB by the users server')
-});
+const Orders = require('./OrdersSchema');
 
 app.use(express.json());
+
+app.use('/attempt-charge', async (req, res) => {
+    const {cardNum, total, user} = req.body;
+    if (cardNum === '1111111111111111') {
+        const last4Digits = cardNum.slice(-4);
+        const maskedNumber = last4Digits.padStart(cardNum.length, '*');
+
+        const orderToStore = {
+            total: total,
+            cardNum: maskedNumber,
+            user: user.userName
+        }
+        try {
+            const storeOrder = await Orders.create(orderToStore);
+            const orderID = storeOrder.id;
+            res.status(200).json({orderID: orderID}).end();
+        }
+        catch (err) {
+            console.log(err.message);
+            res.sendStatus(400);
+        }
+    }
+    else res.sendStatus(400);
+});
 
 app.use((req, res, err, next) => {
     const defaultError = {

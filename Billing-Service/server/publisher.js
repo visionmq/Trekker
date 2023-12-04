@@ -1,6 +1,6 @@
 const amqp = require('amqplib');
 
-export const connect = async(key, msgObj) => {
+export const billPublisher = async(key, msgObj) => {
   const exchange = 'trekker_topic'
   try {
     const connection = await amqp.connect('amqp://localhost');
