@@ -4,7 +4,7 @@ const exchangeName = 'trekker_topic';
 
 //Key is the name of the microService, msgObj is an object that has method and message property.
 //Method is like the action being performed (login, signup)
-export const sendMsg = async (key, msgObj) => {
+const sendMsg = async (key, msgObj) => {
 
   //create a connection to localhost
   //create a channel/ear to listen to messages
