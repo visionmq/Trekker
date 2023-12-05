@@ -6,13 +6,13 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const sendMsg = require('./publisher');
-const receiveMsg = require('./consumer');
+// const receiveMsg = require('./consumer');
 
-// const corsOptions = {
-//   origin: 'http://localhost:8080',
-//   credentials: true,
-// };
-// app.use(cors(corsOptions));
+const corsOptions = {
+  origin: 'http://localhost:8080',
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -67,7 +67,7 @@ app.use((err, req, res, next) => {
 //connects the server to the port
 app.listen(3000, async () => {
   console.log(`Server listening on port ${PORT}`);
-  receiveMsg();
+  // receiveMsg();
 });
 
 /**
@@ -79,9 +79,9 @@ app.listen(3000, async () => {
 
 const { WebSocketServer } = require('ws');
 const wsserver = new WebSocketServer({ port: 443 });
-// let socketSend;
+const amqp = require('amqplib/callback_api');
 
-wsserver.on('connection', async (ws) => {
+wsserver.on('connection', (ws) => {
   // ws.session = { secret: 'Secret Info Here' };
   ws.on('close', () => console.log('Client has disconnected!'));
 
@@ -95,5 +95,37 @@ wsserver.on('connection', async (ws) => {
   const socketSend = (msgObj) => {
     ws.send(msgObj);
   };
-  module.exports = socketSend;
+
+  const exchangeName = 'trekker_topic';
+
+  // const receiveMsg = () => {
+  amqp.connect('amqp://localhost', function (error, connection) {
+    if (error) console.log(error);
+    // console.log('Connection established', connection);
+
+    connection.createChannel(function (err, channel) {
+      // console.log('err', err, 'channel', channel);
+      channel.assertExchange(exchangeName, 'topic', { durable: true });
+
+      channel.assertQueue('AppQueue');
+      channel.bindQueue('AppQueue', exchangeName, 'App');
+      channel.bindQueue('AppQueue', exchangeName, '#.success');
+
+      channel.consume(
+        'AppQueue',
+        (msg) => {
+          const msgObj = msg.content.toString();
+          console.log(
+            `[x] App received: ${msgObj}, now sending thru websocket...`
+          );
+          //ws function
+          console.log('This is socketsend: ', socketSend);
+          socketSend(msgObj); //send json back to fe via ws with instructions in body
+        },
+        {
+          noAck: true,
+        }
+      );
+    });
+  });
 });
