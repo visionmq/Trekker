@@ -24,6 +24,11 @@ body {
         display: flex;
         justify-content: space-around;
         align-items: center;   
+
+        img {
+            height: 10vh;
+            width: auto;
+        }
         
         button {
             padding: 5px 15px;
@@ -48,9 +53,10 @@ body {
 
 
     #welcome {
-        height: 83vh;
+        height: 85vh;
 
         #home-content{
+            margin-top: 5vh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -63,8 +69,8 @@ body {
             height: 35vh;
             width: 40vh;
             z-index: 2;
-            margin-right: -2%;
-            box-shadow: -2px -2px 10px .1px rgba(0, 0, 0, 0.233);
+            margin-right: -5%;
+            box-shadow: 0px 0px 10px -.1px rgba(0, 0, 0, 0.233);
 
             display: flex;
             flex-direction: column;
@@ -86,8 +92,8 @@ body {
                 // margin-bottom: 1.5vh;
             }
 
-            div {
-                height: 50px;
+            .welcome-form {
+                height: 6vh;
                 width: 100%;
                 border-radius: 10px;
                 padding-left: 15px;
@@ -95,6 +101,8 @@ body {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+
+                
                 
                 h5 {
                     font-size: 11px;
@@ -112,9 +120,68 @@ body {
 
             }
 
-            div:focus-within {
+            .welcome-form:focus-within {
                 border: 2px solid black;
             }
+
+            .checkin {
+                height: 6vh;
+                width: 100%;
+                border-radius: 10px;
+                
+                border: 2px solid rgb(194, 194, 194);
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: stretch;
+
+                div {
+                    border: 2px solid transparent;
+                    height: 100%;
+                    padding-top: .5vh;
+                    padding-left: 15px;
+                    border-radius: 10px;
+                }
+
+                #check-in {
+                    border-right: 2px solid rgb(194, 194, 194);
+                    border-top-right-radius: 0px;
+                    border-bottom-right-radius: 0px;
+                }
+
+                #check-out {
+                    border-top-left-radius: 0px;
+                    border-bottom-left-radius: 0px;
+                }
+
+                h5 {
+                    font-size: 11px;
+                    margin-bottom: 2px;
+                    color: rgb(58, 58, 58);
+                }
+
+                input {
+                    border: none;
+                    width: 98%;
+                    outline: none;
+                    font-size: 18px;
+                    color: rgb(109, 109, 109);
+                }
+
+                div:focus-within {
+                    border: 2px solid transparent;
+                    box-shadow: 0px 0px 1px 2px black;
+                }
+
+                #check-in:focus-within {
+                    border-right: 2px solid transparent;
+                }
+            }
+
+                        // .checkin:focus-within {
+                        //     border: 2px solid transparent;
+                        // }
+
 
             
             button {
@@ -122,15 +189,20 @@ body {
                 width: 100%;
                 font-size: 15px;;
                 color: white;
-                background-color: rgba(157, 107, 203, 0.595);
+                background: linear-gradient(.25turn, rgba(203, 107, 197, 0.713), rgba(126, 61, 187, 0.713));
                 border-radius: 10px;
                 border: 1px solid rgb(194, 194, 194);
-                transition: all .3s ease 0s;
+                transition: all .1s ease 0s;
             }
 
-            button:hover {
-                background: linear-gradient(.25turn, rgba(203, 107, 197, 0.595), rgba(126, 61, 187, 0.595));
-            }
+            // button:hover {
+                //     background: linear-gradient(.25turn, rgba(203, 107, 197, 0.713), rgba(126, 61, 187, 0.714));
+                // }
+                
+                button:active {
+                            background-color: rgba(126, 61, 187, 0.714);
+                            box-shadow: 0px 0px 5px .2px rgb(113, 113, 113);
+                        }
         }
 
         #home-img {
@@ -149,8 +221,10 @@ body {
     
     #footer {
         // position: fixed;
-        height: 7vh;
-        background-color: rgb(206, 206, 206);
+        // opacity: 50%;
+        // border-top: 3px solid rgb(154, 161, 179);
+        height: 5vh;
+        background: linear-gradient( rgba(203, 107, 197, 0.713), rgba(126, 61, 187, 0.713));
     }
 }
 
