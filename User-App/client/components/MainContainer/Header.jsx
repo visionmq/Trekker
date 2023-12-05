@@ -7,16 +7,24 @@ const Header = () => {
     fetch('/rabbit', {
       method: 'POST',
       headers: {'Content-type': 'application/json'},
-      body: JSON.stringify({message: 'hello'})
+      body: JSON.stringify({message: {
+        method: 'attempt-charge',
+        status: 'pre-checkout',
+        body:{
+          cardNum: '',
+          total: '',
+          userName: '',
+        }
+      }})
     })
   }
 
   return (
     <div id="header">
-      <Link to='/'><button>Home</button></Link>
-      <Link to='/search'><button>Search</button></Link>
-      <Link to='/listing'><button>Listing</button></Link>
-      <button onClick={rabbitTest}>Test Rabbit</button>
+      <button id='test' onClick={rabbitTest}>Test Rabbit</button>
+      <Link className='top-buttons' to='/'><button>Home</button></Link>
+      <Link className='top-buttons' to='/search'><button>Search</button></Link>
+      <Link className='top-buttons' to='/listing'><button>Listing</button></Link>
     </div>
   );
 };
