@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.BILLING_PORT
 require('dotenv').config()
-const notifConsumer = require('./consumer')
+const PORT = process.env.NOTIFICATION_PORT
+const notifConsume = require('./consumer')
 app.use(express.json());
 
 
-notifConsumer();
+
 
 app.use((error, req, res, next) => {
     const defaultError = {
@@ -19,5 +19,6 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(PORT, () => {
+    notifConsume();
     console.log(`listening on port ${PORT}`)
 });

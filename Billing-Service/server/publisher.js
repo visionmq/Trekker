@@ -1,25 +1,23 @@
-const amqp = require('amqplib');
+const amqp = require('amqplib/callback_api');
 
-const billPublisher = async(key, msgObj) => {
-  const exchange = 'trekker_topic'
-  try {
-    const connection = await amqp.connect('amqp://localhost');
-    const channel = await connection.createChannel();
-    await channel.assertExchange(exchange, 'topic', {durable: true})
-    console.log('inside of the publisher');
+const billPublisher = (key, msgObj) => {
+  const exchange = 'trekker_topic';
+  console.log('starting the connection in the publisher')
+    amqp.connect('amqp://localhost', function (error, connection) {
 
-    channel.publish(exchange, key, Buffer.from(JSON.stringify(msgObj)))
+      if (error) console.log('error connecting to amqp: ', error.message);
 
-  }
-  catch (err) {
-    console.log('error connecting to the publisher: ', err.message);
-  }
-  finally {
-    setTimeout(() => {
-      //connection.close();
-      process.exit(0);
-    }, 500)
-  }
+      connection.createChannel(function (err, channel) {
+
+        if (error) console.log('error connecting to the channel: ', err.message);
+        channel.assertExchange(exchange, 'topic', {durable: true})
+        console.log('sending a message to: ', key);
+        channel.publish(exchange, key, Buffer.from(JSON.stringify(msgObj)))
+      })
+      setTimeout(() => {
+        connection.close();
+      }, 500)
+    })
 };
 
 module.exports = billPublisher;
