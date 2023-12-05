@@ -21,10 +21,10 @@ const Header = () => {
 
   return (
     <div id="header">
-      <Link to='/'><button>Home</button></Link>
-      <Link to='/search'><button>Search</button></Link>
-      <Link to='/listing'><button>Listing</button></Link>
-      <button onClick={rabbitTest}>Test Rabbit</button>
+      <button id='test' onClick={rabbitTest}>Test Rabbit</button>
+      <Link className='top-buttons' to='/'><button>Home</button></Link>
+      <Link className='top-buttons' to='/search'><button>Search</button></Link>
+      <Link className='top-buttons' to='/listing'><button>Listing</button></Link>
     </div>
   );
 };
