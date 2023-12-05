@@ -19,6 +19,10 @@ app.use(express.json());
 app.post('/newListing', propertyController.addProperty, (req, res, next) => {
     res.status(200).send('property added')
 });
+app.post('/checkQuantity',propertyController.checkQuanity,(req,res) => {
+    console.log('inside of checkQuantity in server')
+    res.status(200).send('hello it worked')
+})
 
 app.use((req, res, err, next) => {
     const defaultError = {
@@ -30,6 +34,6 @@ app.use((req, res, err, next) => {
     res.status(errObj.status).json(errObj.message)
 });
 
-app.listen(6000, () => {
-    console.log(`server listening on port ${6000}`);
+app.listen(6002, () => {
+    console.log(`server listening on port ${6002}`);
   });

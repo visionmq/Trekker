@@ -42,6 +42,15 @@ const { createClient } = require('@supabase/supabase-js');
  })
 
 
+propertyController.checkQuanity = (req,res,next) => {
+  const id = req.body._id
+  const query = Property.findOne({_id:id})
+  if(query){
+    return next()
+  }
+  return next(err)
+}
+
 
  module.exports = propertyController; 
 
