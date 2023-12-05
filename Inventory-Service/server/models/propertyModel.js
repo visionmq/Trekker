@@ -10,7 +10,7 @@ const propertySchema = new Schema({
   pricePerDay: {type: String, required: false},
   address: { type: String, required: false},
   zipCode: { type: String, required: false },
-  quantity: { type: String, required: false}
+  quantity: { type: Number, required: false}
 });
 
 module.exports = mongoose.model('Property', propertySchema);
