@@ -125,14 +125,21 @@ body {
                 background-color: rgba(157, 107, 203, 0.595);
                 border-radius: 10px;
                 border: 1px solid rgb(194, 194, 194);
+                transition: all .3s ease 0s;
+            }
+
+            button:hover {
+                background: linear-gradient(.25turn, rgba(203, 107, 197, 0.595), rgba(126, 61, 187, 0.595));
             }
         }
 
         #home-img {
             height: 55vh;
             // min-width: 30vw;
-            max-width: 55vw;
+            // border: 1px solid black;
+            width: 55vw;
             background-size: cover;
+            background-image: url('../assets/fireplace-416042_1280.jpg');
             border-radius: 15px;
             z-index: 1;
         }

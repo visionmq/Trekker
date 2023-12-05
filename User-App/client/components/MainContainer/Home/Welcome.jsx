@@ -14,7 +14,9 @@ const Welcome = () => {
                 <div><h5>CHECK IN</h5><input placeholder='Start Date'></input></div>
                 <button>Search</button>
             </div>
-            <img id='home-img' src={picture}></img>
+            <div id='home-img'>
+            <img ></img>
+            </div>
         </div>
 
     </div>
