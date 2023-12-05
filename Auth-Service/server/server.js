@@ -3,31 +3,35 @@ const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 require('dotenv').config()
-const PORT = process.env.AUTH_PORT//not working
-const mongoURI = process.env.MONGO_URI_USERS//not working
+const PORT = process.env.AUTH_PORT
+const mongoURI = process.env.MONGO_URI_USERS
 const sendMsg = require('./publisher.js')
 
-mongoose.connect('mongodb+srv://Houses-R-Us:KIMVTjsFPqWXOSzc@houses-r-us-users.o0ujl8u.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect(mongoURI);
 
 mongoose.connection.once('open', () => {
     console.log('user database online')
 });
 
-const controller = require('./controllers/authController.js')
+const authController = require('./controllers/authController.js')
 
 app.use(express.json());
 
-app.post('/signin', controller.signin, (req, res) => {
+app.get('/', (req, res) => {
+    res.status(200).send('In Auth')
+});
+
+app.post('/signin', authController.signin, (req, res) => {
     sendMsg('App', res.locals.msg)
-    res.status(200).send('complete')
+    res.status(200).json(res.locals.user)
+});
+app.post('/signup', authController.signup, (req, res) => {
+    // sendMsg('App', res.locals.msg)
+    res.status(200).json(res.locals.newUser)
   });
-app.post('/signup', controller.signup, (req, res) => {
-    sendMsg('App', res.locals.msg)
-    res.status(200).send('complete')
-  });
-app.post('/checkout', controller.checkout, (req, res) => {
-    sendMsg('App', res.locals.msg)
-    res.status(200).send('complete')
+app.post('/checkout', authController.checkout, (req, res) => {
+    // sendMsg('App', res.locals.msg)
+    res.status(200).json('complete')
   });
 
 app.use((req, res, err, next) => {
@@ -41,6 +45,6 @@ app.use((req, res, err, next) => {
 });
 
 app.listen(4000, () => {
-    console.log(`listening on port 4000`)
+    console.log(`listening on port ${PORT}`)
 });
 
