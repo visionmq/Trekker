@@ -2,16 +2,10 @@ const amqp = require('amqplib/callback_api');//change to callbackApi not promise
 const sendMsg = require('./publisher.js');
 const exchangeName = 'trekker_topic';
 
-console.log('in consumer')
-
-
-
 const receiveMsg = () => {
-  console.log('in receive')
+  console.log(`READY TO RECIEVE CAPT'N`)
   amqp.connect('amqp://localhost', function(error, connection){
-    // console.log('connection1', connection)
     connection.createChannel(function(error, channel){
-      // console.log('channel', channel)
       channel.assertExchange(exchangeName, 'topic', { durable: true });
       channel.assertQueue('AuthQueue');
       channel.bindQueue('AuthQueue', exchangeName, 'Auth');
@@ -20,49 +14,60 @@ const receiveMsg = () => {
       channel.consume(
         'AuthQueue',
         async (msg) => {
-        const msgObj = msg.content.toString();
-              console.log(`[x] Auth received: ${msgObj.method}, now sending sending to switcher...`)
+        const msgObj = JSON.parse(msg.content.toString());
+            console.log(`[x] Auth received: ${msgObj.method}, now sending sending to switcher...`)
           switch(msgObj.method) {
             case 'signup':
+              //{"method": "signup", "username": "", "password": ""}
               try{
-            console.log('in signup')
-            const msgObj = JSON.parse(msg.content.toString());
-            console.log(`[x] Auth received: ${msgObj}`);
-            const data = await fetch('/signup', {
+            console.log(`[x] signup received: ${msgObj.method}`);
+            const data = await fetch('http://localhost:4000/signup', {
               method: 'POST',
-              body: msgObj
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(msgObj)
             });
-            sendMsg(key, data)
+            sendMsg('App', data)
           }
           catch (err){
-            console.log(err.message)
+            console.log('signup error is: ', err.message)
           }
+          break
             case 'signin':
+               //{"method": "signup", "username": "", "password": ""}
               try{
-            const msgObj = JSON.parse(msg.content.toString());
-            console.log(`[x] Auth received: ${msgObj}`);
-            const data = await fetch('/signin', {
+            console.log(`[x] signin received: ${msgObj.method}`);
+            const data = await fetch('http://localhost:4000/signin', {
               method: 'POST',
-              body: msgObj
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(msgObj)
             })
-            sendMsg(key, data)
+            sendMsg('App', data)
           }
           catch (err){
-            console.log(err.message)
+            console.log('signin error is: ', err.message)
           }
+          break
           case 'checkout':
+             //{"username": "signup", "username": "", "bookings": ""}
               try{
-            const msgObj = JSON.parse(msg.content.toString());
-            console.log(`[x] Auth received: ${msgObj}`);
-            const data = await fetch('/checkout', {
+            console.log(`[x] checkout received: ${msgObj.method}`);
+            const data = await fetch('http://localhost:4000/checkout', {
               method: 'POST',
-              body: msgObj
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(msgObj)
             })
-            sendMsg(key, data)
+            sendMsg('App', data)
           }
           catch (err){
-            console.log(err.message)
+            console.log('checkout error is: ', err.message)
           }
+          break
           }
         },
         {
@@ -72,8 +77,6 @@ const receiveMsg = () => {
     });
   })
 }
-
-console.log('bout to receive')
 receiveMsg()
 
 // module.exports = receiveMsg

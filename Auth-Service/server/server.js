@@ -17,17 +17,21 @@ const authController = require('./controllers/authController.js')
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.status(200).send('In Auth')
+});
+
 app.post('/signin', authController.signin, (req, res) => {
     sendMsg('App', res.locals.msg)
-    res.status(200).send(res.locals.user)
+    res.status(200).json(res.locals.user)
 });
 app.post('/signup', authController.signup, (req, res) => {
     // sendMsg('App', res.locals.msg)
-    res.status(200).send(res.locals.newUser)
+    res.status(200).json(res.locals.newUser)
   });
 app.post('/checkout', authController.checkout, (req, res) => {
     // sendMsg('App', res.locals.msg)
-    res.status(200).send('complete')
+    res.status(200).json('complete')
   });
 
 app.use((req, res, err, next) => {
