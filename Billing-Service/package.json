@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Performs billing services for Houses-R-Us",
   "scripts": {
-    "start": "node server/billingServer.js",
-    "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon server/server.js",
+    "start": "node server/server.js",
     "test": "jest --verbose"
   },
   "nodemonConfig": {
@@ -19,9 +17,11 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",
     "amqplib": "^0.10.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "dotenv-webpack": "^8.0.1",
     "express": "^4.12.3",
+    "node-fetch": "^3.3.2",
     "path": "^0.12.7"
   },
   "devDependencies": {

@@ -5,9 +5,9 @@
   "main": "index.js",
   "exports": "./index.js",
   "scripts": {
-    "start": "NODE_ENV=production node server/server.js",
-    "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon server/server.js",
+    "start": "NODE_ENV=production nodemon server/server.js",
+    "build": "NODE_ENV=production node server/consumer.js",
+    "dev": "NODE_ENV=development webpack serve & NODE_ENV=development nodemon server/server.js",
     "test": "jest --verbose"
   },
   "nodemonConfig": {
@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",
+    "amqplib": "^0.10.3",
     "dotenv": "^16.3.1",
     "dotenv-webpack": "^8.0.1",
     "express": "^4.12.3",

@@ -1,4 +1,4 @@
-const amqp = require('amqplib');
+const amqp = require('amqplib/callback_api');
 const nodemailer = require('nodemailer');
 
 const exchange = 'trekker_topic';
@@ -13,44 +13,42 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const receive = async () => {
-  try {
-    const connection = await amqp.connect('amqp://localhost');
-    const channel = await connection.createChannel();
-    await channel.assertExchange(exchange, 'topic', {durable: true})
-  }
-  catch (err) {
-    console.log(err.message);
-  }
-  try {
-    const NotifQueue = await channel.assertQueue('NotifQueue');
-    channel.bindQueue(NotifQueue, exchange, '#.success');
+const notifConsume = () => {
+  amqp.connect('amqp://localhost', function (error, connection) {
+    console.log('Notification MS connecting to the consumer.')
+    if (error) console.log('error connecting to amqp: ', error.message)
+    connection.createChannel(function (error, channel) {
+      if (error) console.log('error connecting to the channel: ', error.message)
+      channel.assertExchange(exchange, 'topic', { durable: true })
+      channel.assertQueue('NotifQueue');
+      channel.bindQueue('NotifQueue', exchange, '#.success');
 
-    channel.consume(
-      NotifQueue,
-      async (msg) => { 
-          const msgObj = await JSON.parse(msg.content.toString());
-          console.log(`[x] App received: ${msgObj}`);
-
-          const email = msgObj.email;
-          const orderNum = msgObj.orderID;
-
+      channel.consume(
+        'NotifQueue',
+        async (msg) => {
+          const msgObj = JSON.parse(msg.content.toString());
+          console.log(msgObj)
+          const email = msgObj.body.email;
+          const user = msgObj.body.user.uername;
+          const orderNum = msgObj.body.orderID;
+          console.log(user, orderNum);
           const mailOptions = {
             from: 'TrekkerRentals@gmail.com',
             to: email,
-            subject: 'Your booking is complete!',
-            text: `Your booking confirmation code is: ${orderNum}.`
+            subject: 'Trekker: Your booking is complete!',
+            text: `Howdy! Your booking order number is: ${orderNum}.`
           };
-          
+          console.log(`Hi ${user}! Your booking order number is: ${orderNum}.`)
+
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) console.log('Error: could not send mail.', error);
             else console.log('Email confirmation sent!');
-            });
-          },
-      { noAck: true }
-    );
-  }
-  catch (err) {
-    console.log(err.message);
-  }
+          });
+        },
+        { noAck: true }
+      )
+    })
+  })
 };
+
+module.exports = notifConsume;
