@@ -5,22 +5,31 @@ const PORT = process.env.BILLING_PORT;
 const Orders = require('./OrdersSchema');
 const billConsume = require('./consumer');
 const billPublisher = require('./publisher');
+//const cors = require('cors');
 
 app.use(express.json());
+// const corsOptions = {
+//     origin: 'http://localhost:8080',
+//     credentials: true,
+//   };
+//   app.use(cors(corsOptions));
 
-// billConsume();
-// const msg = {
-//     method: 'attempt-charge',
-//     stage: 'pre-charge',
-//     body: {
-//         cardNum: '1111111111111111', 
-//         total: 123.50,
-//         user: {username: 'Cheri'},
-//     }
-// }
-// billPublisher('Bill', msg);
+
+const msg = {
+    method: 'attempt-charge',
+    stage: 'pre-charge',
+    body: {
+        cardNum: '1111111111111111', 
+        total: 123.50,
+        user: {username: 'Justin'},
+        email: 'jcreyes917@gmail.com',
+    }
+};
+
+
 
 app.use('/attempt-charge', async (req, res) => {
+    
     const {cardNum, total, user} = req.body;
     if (cardNum === '1111111111111111') {
         const last4Digits = cardNum.slice(-4);
@@ -28,13 +37,14 @@ app.use('/attempt-charge', async (req, res) => {
 
         const orderToStore = {
             total: total,
-            cardNum: maskedNumber,
-            user: user.userName
+            cardNumber: maskedNumber,
+            user: user.username,
         }
         try {
             const storeOrder = await Orders.create(orderToStore);
-            const orderID = storeOrder.id;
-            res.status(200).json({orderID: orderID}).end();
+            console.log('here is the created order id: ', storeOrder.id)
+            const orderID = {id: storeOrder.id};
+            res.status(200).send(orderID);
         }
         catch (err) {
             console.log(err.message);
@@ -44,7 +54,7 @@ app.use('/attempt-charge', async (req, res) => {
     else res.sendStatus(400);
 });
 
-app.use((req, res, err, next) => {
+app.use((err, req, res, next) => {
     const defaultError = {
         log: 'There was an unknown middleware error in billing',
         status: 500,
@@ -57,3 +67,6 @@ app.use((req, res, err, next) => {
 app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`)
 });
+
+billConsume();
+billPublisher('Bill', msg);

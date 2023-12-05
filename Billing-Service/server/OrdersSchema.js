@@ -9,7 +9,7 @@ mongoose.connection.once('open', () => {
 });
 
 const orders = new Schema({
-  total: { type: Number, required: true, unique: true},
+  total: { type: Number, required: true},
   cardNumber: { type: String, required: true},
   user: {type: String, required: true}
 })
