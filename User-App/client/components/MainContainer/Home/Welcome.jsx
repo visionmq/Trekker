@@ -13,9 +13,10 @@ const Welcome = () => {
                 <div className='welcome-form'><h5>LOCATION</h5><input id="location-search" placeholder='New York, NY'></input></div>
                 <div className='checkin'>
                     <div id='check-in'><h5>CHECK IN</h5><input id="checkin-search" placeholder='Start Date'></input></div>
+                    <span id='divider'></span>
                     <div id='check-out'><h5>CHECK OUT</h5><input id="checkout-search" placeholder='End Date'></input></div>
                 </div>
-                <button>Search</button>
+                <button><div>Search</div></button>
             </div>
             <div id='home-img'>
             <img ></img>

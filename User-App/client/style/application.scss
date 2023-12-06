@@ -64,7 +64,7 @@ body {
         #home-search {
             // border: 1px solid black;
             border-radius: 15px;
-            padding: 30px;
+            padding: 3vh;
             background-color: white;
             height: 35vh;
             width: 40vh;
@@ -78,14 +78,14 @@ body {
             align-items: center;
 
             h3 {
-                font-size: 30px;
+                font-size: 3.3vh;
                 align-self: flex-start;
                 color: rgb(58, 58, 58);
                 // margin-left: 10%
             }
 
             p {
-                font-size: 20px;
+                font-size: 2vh;
                 align-self: flex-start;
                 margin-bottom: 5%;
                 color: rgb(109, 109, 109);
@@ -105,8 +105,8 @@ body {
                 
                 
                 h5 {
-                    font-size: 11px;
-                    margin-bottom: 2px;
+                    font-size: 1.2vh;
+                    margin-bottom: .3vh;
                     color: rgb(58, 58, 58);
                 }
                 
@@ -114,7 +114,7 @@ body {
                     border: none;
                     width: 100%;
                     outline: none;
-                    font-size: 18px;
+                    font-size: 2vh;
                     color: rgb(109, 109, 109);
                 }
 
@@ -133,20 +133,30 @@ body {
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
-                align-items: stretch;
+                align-items: center;
 
                 div {
                     border: 2px solid transparent;
                     height: 100%;
-                    padding-top: .5vh;
+                    // padding-top: .5vh;
                     padding-left: 15px;
                     border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
                 }
 
                 #check-in {
-                    border-right: 2px solid rgb(194, 194, 194);
+                    // border-right: 2px solid rgb(194, 194, 194);
                     border-top-right-radius: 0px;
                     border-bottom-right-radius: 0px;
+                }
+
+                #divider {
+                    border-left: 1px solid rgb(194, 194, 194);
+                    z-index: -1;
+                    height: 70%;
+
                 }
 
                 #check-out {
@@ -155,8 +165,8 @@ body {
                 }
 
                 h5 {
-                    font-size: 11px;
-                    margin-bottom: 2px;
+                    font-size: 1.2vh;
+                    margin-bottom: .3vh;
                     color: rgb(58, 58, 58);
                 }
 
@@ -164,7 +174,7 @@ body {
                     border: none;
                     width: 98%;
                     outline: none;
-                    font-size: 18px;
+                    font-size: 2vh;
                     color: rgb(109, 109, 109);
                 }
 
@@ -174,7 +184,7 @@ body {
                 }
 
                 #check-in:focus-within {
-                    border-right: 2px solid transparent;
+                    // border-right: 2px solid black;
                 }
             }
 
@@ -185,14 +195,25 @@ body {
 
             
             button {
-                height: 40px;
+                height: 4.5vh;
                 width: 100%;
-                font-size: 15px;;
-                color: white;
                 background: linear-gradient(.25turn, rgba(203, 107, 197, 0.713), rgba(126, 61, 187, 0.713));
                 border-radius: 10px;
                 border: 1px solid rgb(194, 194, 194);
                 transition: all .1s ease 0s;
+
+                
+                
+                div, svg {
+                    height: 100%;
+                    color: white;
+                    font-size: 1.7vh;
+                    // border: 1px solid black;
+                    display: flex;
+                        flex-direction: row;
+                        justify-content: center;
+                        align-items: center;
+                }
             }
 
             // button:hover {
@@ -220,18 +241,51 @@ body {
     
     
     #footer {
-        // position: fixed;
-        // opacity: 50%;
+        color: white;
         // border-top: 3px solid rgb(154, 161, 179);
         height: 5vh;
         background: linear-gradient( rgba(203, 107, 197, 0.713), rgba(126, 61, 187, 0.713));
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        p {
+            margin-right: 1vw;
+            font-size: 2vh;
+        }
     }
 }
 
 
 #search {
-    border: 3px solid pink;
+    // border: 3px solid pink;
     height: 90vh;
+    display: flex;
+
+    #search-left {
+        height: 100%;
+        width: 65%;
+        // border: 1px solid black;
+
+        #grid-container {
+            // border: 1px solid black;
+            padding: 1vw 0;
+            height: 94%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1vw;
+            overflow: scroll;
+
+            .grid-result {
+                border: 1px solid green;
+                border-radius: 1vw;
+                // background-color: black;
+                width: 15vw;
+                height: 15vw;
+            }
+        }
+    }
 }
 
 .listing {

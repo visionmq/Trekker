@@ -5,16 +5,19 @@ import logo from '../../assets/Trekker_final.png'
 const Header = () => {
 
   const rabbitTest = () => {
-    fetch('/rabbit', {
+    fetch('/inv', {
       method: 'POST',
       headers: {'Content-type': 'application/json'},
       body: JSON.stringify({message: {
-        method: 'attempt-charge',
-        status: 'pre-checkout',
+        method: 'checkout',
+        status: 'app-preCharge-check-inv',
         body:{
-          cardNum: '',
           total: '',
-          userName: '',
+          username: '',
+          cardNum: '',
+          email: '',
+          property_id: '',
+          quantity: ''
         }
       }})
     })

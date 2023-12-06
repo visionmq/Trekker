@@ -90,7 +90,7 @@ wsserver.on('connection', (ws) => {
   };
 
   console.log('Websocket connected, turning on consumer');
-  ws.send('Websocket working');
+  ws.send('Websocket Server working');
 
   const socketSend = (msgObj) => {
     ws.send(msgObj);
