@@ -44,12 +44,13 @@ const { createClient } = require('@supabase/supabase-js');
 
 propertyController.checkQuanity = async (req,res,next) => {
   console.log('ENTERED THE PROP CONTROLLER FOR CHECK QUANTITY')
-  req.body.status = 'inv-preCharge-noAvail-app'
   // console.log(req.body)
-  const id = req.body._id
-  const quantity = req.body.quantity
+  const id = req.body.body.propertyID
+
+  const quantity = req.body.body.quantity
 
   const query = await Property.findOne({_id:id})
+  console.log(query)
 
 
   if(query.quantity >= quantity){
@@ -64,13 +65,14 @@ propertyController.checkQuanity = async (req,res,next) => {
 }
 
 propertyController.updateQuantity = async(req,res,next) => {
-  const id = req.body._id
-  const quantity = req.body.quantity
+  const id = req.body.body.propertyID
+  const quantity = req.body.body.quantity
 
   const query = await Property.findOne({_id:id})
 
-  const update = await Property.findByIdAndUpdate({_id:id},{quantity: query.quantity - quantity});
+  const update = await Property.findByIdAndUpdate({_id:id},{quantity: query.quantity - quantity},{new: true});
   req.body.status = 'inv-property-updated-app'
+  req.body.body.quantity = update.quantity
 next()
 }
 

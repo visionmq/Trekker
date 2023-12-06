@@ -29,16 +29,17 @@ const notifConsume = () => {
           const msgObj = JSON.parse(msg.content.toString());
           console.log(msgObj)
           const email = msgObj.body.email;
-          const user = msgObj.body.user.uername;
+          const user = msgObj.body.userName;
           const orderNum = msgObj.body.orderID;
-          console.log(user, orderNum);
+          const property = msgObj.body.property;
+          console.log(user, orderNum, property);
           const mailOptions = {
             from: 'TrekkerRentals@gmail.com',
             to: email,
             subject: 'Trekker: Your booking is complete!',
-            text: `Howdy! Your booking order number is: ${orderNum}.`
+            text: `Hi ${user}! Your booking for ${property} is confirmed. Your order number is: ${orderNum}.`
           };
-          console.log(`Hi ${user}! Your booking order number is: ${orderNum}.`)
+          console.log(`Hi ${user}! Your booking for ${property} is confirmed. Your order number is: ${orderNum}.`)
 
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) console.log('Error: could not send mail.', error);

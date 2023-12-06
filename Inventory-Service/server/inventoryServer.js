@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.INVENTORY_PORT //NOT working lol
 const propertyController = require('./controllers/propertyController');
+const receiveMsg = require('./consumer');
 require('dotenv').config();
 
 const mongoURI = process.env.MONGO_URI_PROPERTIES //NOT working lol
@@ -21,7 +22,7 @@ app.post('/newListing', propertyController.addProperty, (req, res, next) => {
 });
 app.post('/checkQuantity',propertyController.checkQuanity,(req,res) => {
     console.log('inside of checkQuantity in server file')
-    console.log(req.body)
+    // console.log(req.body)
     res.status(200).send(req.body)
 })
 app.post('/updateQuantity',propertyController.updateQuantity,(req,res) => {
@@ -39,5 +40,6 @@ app.use((req, res, err, next) => {
 });
 
 app.listen(6005, () => {
+    receiveMsg()
     console.log(`server listening on port ${6005}`);
   });
