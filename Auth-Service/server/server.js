@@ -5,7 +5,7 @@ const app = express();
 require('dotenv').config()
 const PORT = process.env.AUTH_PORT
 const mongoURI = process.env.MONGO_URI_USERS
-const sendMsg = require('./publisher.js')
+const sendMsg = require('./publisher.js');
 
 mongoose.connect(mongoURI);
 
@@ -13,7 +13,8 @@ mongoose.connection.once('open', () => {
     console.log('user database online')
 });
 
-const authController = require('./controllers/authController.js')
+const authController = require('./controllers/authController.js');
+const receiveMsg = require('./consumer.js');
 
 app.use(express.json());
 
@@ -25,12 +26,14 @@ app.post('/signin', authController.signin, (req, res) => {
     sendMsg('App', res.locals.msg)
     res.status(200).json(res.locals.user)
 });
+
 app.post('/signup', authController.signup, (req, res) => {
     // sendMsg('App', res.locals.msg)
     res.status(200).json(res.locals.newUser)
   });
+
 app.post('/checkout', authController.checkout, (req, res) => {
-    // sendMsg('App', res.locals.msg)
+    sendMsg('App', res.locals.msg)
     res.status(200).json('complete')
   });
 
@@ -45,6 +48,7 @@ app.use((req, res, err, next) => {
 });
 
 app.listen(4000, () => {
+    receiveMsg()
     console.log(`listening on port ${PORT}`)
 });
 

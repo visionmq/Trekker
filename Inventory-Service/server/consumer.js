@@ -94,4 +94,4 @@ const receiveMsg = () => {
   });
 };
 
-receiveMsg();
+module.exports = receiveMsg

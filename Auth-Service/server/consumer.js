@@ -2,7 +2,7 @@ const amqp = require('amqplib/callback_api');//change to callbackApi not promise
 const sendMsg = require('./publisher.js');
 const exchangeName = 'trekker_topic';
 
-const receiveMsg = () => {
+ const receiveMsg = () => {
   console.log(`READY TO RECIEVE CAPT'N`)
   amqp.connect('amqp://localhost', function(error, connection){
     connection.createChannel(function(error, channel){
@@ -15,12 +15,12 @@ const receiveMsg = () => {
         'AuthQueue',
         async (msg) => {
         const msgObj = JSON.parse(msg.content.toString());
-            console.log(`[x] Auth received: ${msgObj.method}, now sending sending to switcher...`)
+            console.log(`[x] Auth received: ${msgObj.status}, now sending sending to switcher...`)
           switch(msgObj.status) {
             case 'app-signup-request-auth':
               //{"method": "signup", "username": "", "password": ""}
               try{
-            console.log(`[x] signup received: ${msgObj.method}`);
+            console.log(`[x] signup received: ${msgObj.status}`);
             const data = await fetch('http://localhost:4000/signup', {
               method: 'POST',
               headers: {
@@ -37,7 +37,7 @@ const receiveMsg = () => {
             case 'app-login-request-auth':
                //{"method": "signup", "username": "", "password": ""}
               try{
-            console.log(`[x] login received: ${msgObj.method}`);
+            console.log(`[x] login received: ${msgObj.status}`);
             const data = await fetch('http://localhost:4000/signin', {
               method: 'POST',
               headers: {
@@ -54,7 +54,7 @@ const receiveMsg = () => {
           case 'bill-postCharge-success-all':
              //{"username": "signup", "username": "", "bookings": ""}
               try{
-            console.log(`[x] checkout received: ${msgObj.method}`);
+            console.log(`[x] checkout received: ${msgObj.status}`);
             const data = await fetch('http://localhost:4000/checkout', {
               method: 'POST',
               headers: {
@@ -77,6 +77,5 @@ const receiveMsg = () => {
     });
   })
 }
-receiveMsg()
 
-// module.exports = receiveMsg
+module.exports = receiveMsg

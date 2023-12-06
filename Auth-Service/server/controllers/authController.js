@@ -23,8 +23,8 @@ authController.signup = (req, res, next) => {
   //     };
   //     return next(error);
   // }
-    console.log('this is the body ', req.body)
-  User.create({username: req.body.username, password: req.body.password})
+  console.log('this is the body ', req.body)
+  User.create({username: req.body.body.username, password: req.body.body.password, email: req.body.body.email, })
   .then((user) => {
     // console.log(user, ' has been added to the database')
     res.locals.newUser = user
@@ -40,21 +40,26 @@ authController.signup = (req, res, next) => {
 };
 
 authController.signin = async (req, res, next) => {
-    const user = await User.findOne({username: req.body.username, password: req.body.password})
+    const user = await User.findOne({username: req.body.body.username, password: req.body.body.password})
     if(!user) return res.status(404).send('User not found')
+    // console.log(user, ' has been logged in')
     res.locals.user = user
     next();
 }
 
-authController.checkout = (req, res, next) => {
+authController.checkout = async(req, res, next) => {
+    console.log('this is req.body', req.body)
 
-    User.updateOne({username: req.body.username}, {$push: {bookings: req.body.bookings}})
-    .then((booking) => {
-        console.log(booking, ` has been added to ${req.body.username}'s bookings`)
+    User.updateOne({username: req.body.body.username}, {$push: {bookings: req.body.body.propertyID}})
+    .then((bookings) => {
+      console.log(`${req.body.body.propertyID} has been added to ${req.body.body.username}'s database`)
       })
       .catch((err) => {
         return next(err);
       })
+
+    const user = await User.findOne({username: req.body.body.username})
+    console.log('this is user', user)
     next();
 }
 
