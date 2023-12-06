@@ -50,7 +50,7 @@ const receiveMsg = () => {
                 throw error;
               }
               break;
-            case 'app-preCharge-attempt-bill':
+            case 'app-preCharge-check-inv':
               try {
                 console.log('inside of check quant')
                 const result = await fetch('http://localhost:6005/checkQuantity', {

@@ -16,8 +16,8 @@ const receiveMsg = () => {
         async (msg) => {
         const msgObj = JSON.parse(msg.content.toString());
             console.log(`[x] Auth received: ${msgObj.method}, now sending sending to switcher...`)
-          switch(msgObj.method) {
-            case 'signup':
+          switch(msgObj.status) {
+            case 'app-signup-request-auth':
               //{"method": "signup", "username": "", "password": ""}
               try{
             console.log(`[x] signup received: ${msgObj.method}`);
@@ -34,10 +34,10 @@ const receiveMsg = () => {
             console.log('signup error is: ', err.message)
           }
           break
-            case 'signin':
+            case 'app-login-request-auth':
                //{"method": "signup", "username": "", "password": ""}
               try{
-            console.log(`[x] signin received: ${msgObj.method}`);
+            console.log(`[x] login received: ${msgObj.method}`);
             const data = await fetch('http://localhost:4000/signin', {
               method: 'POST',
               headers: {
@@ -51,7 +51,7 @@ const receiveMsg = () => {
             console.log('signin error is: ', err.message)
           }
           break
-          case 'checkout':
+          case 'bill-postCharge-success-all':
              //{"username": "signup", "username": "", "bookings": ""}
               try{
             console.log(`[x] checkout received: ${msgObj.method}`);

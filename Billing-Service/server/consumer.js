@@ -18,8 +18,8 @@ const billConsume = () => {
         'BillQueue',
         async (msg) => {
           const msgObj = JSON.parse(msg.content.toString());
-          switch (msgObj.method) {
-            case 'attempt-charge':
+          switch (msgObj.status) {
+            case 'inv-preCharge-attempt-bill':
   
               console.log('Bill Consumer received: ', msgObj);
               const options = {
@@ -35,8 +35,7 @@ const billConsume = () => {
                 if (attemptCharge.status < 299) {
                   msgObj.body.orderID = response.id;
                   msgObj.body.charged = true;
-                  msgObj.method = 'post-charge';
-                  msgObj.stage = 'sucessfully-charged'
+                  msgObj.status = 'bill-postCharge-success-all'
                   delete msgObj.body.cardNum;
                   delete msgObj.body.total;
                   billPublisher('order.success', msgObj);

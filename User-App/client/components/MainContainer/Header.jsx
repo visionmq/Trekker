@@ -8,8 +8,8 @@ const Header = () => {
       method: 'POST',
       headers: {'Content-type': 'application/json'},
       body: JSON.stringify({message: {
-        method: 'attempt-charge',
-        status: 'pre-checkout',
+        method: 'checkout',
+        status: 'app-preCharge-check-inv',
         body:{
           cardNum: '',
           total: '',
