@@ -26,7 +26,7 @@ const sendMsg = (key, msgObj) => {
     }
   );
 };
-
-sendMsg('Inv', {hello:'bobby'});
+// const msg = {"method":"CheckQuantity","_id":"6568c6155533b3ac5b224cd2"}
+// sendMsg('Inv',msg);
 
 module.exports = sendMsg;

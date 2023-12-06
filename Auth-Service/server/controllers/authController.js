@@ -23,7 +23,7 @@ authController.signup = (req, res, next) => {
   //     };
   //     return next(error);
   // }
-
+    console.log('this is the body ', req.body)
   User.create({username: req.body.username, password: req.body.password})
   .then((user) => {
     // console.log(user, ' has been added to the database')

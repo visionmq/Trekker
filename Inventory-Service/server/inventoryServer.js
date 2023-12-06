@@ -20,10 +20,14 @@ app.post('/newListing', propertyController.addProperty, (req, res, next) => {
     res.status(200).send('property added')
 });
 app.post('/checkQuantity',propertyController.checkQuanity,(req,res) => {
-    console.log('inside of checkQuantity in server')
-    res.status(200).send('hello it worked')
+    console.log('inside of checkQuantity in server file')
+    console.log(req.body)
+    res.status(200).send(req.body)
 })
-
+app.post('/updateQuantity',propertyController.updateQuantity,(req,res) => {
+    console.log(req.body)
+    res.status(200).send(req.body)
+})
 app.use((req, res, err, next) => {
     const defaultError = {
         log: 'There was an unknown middleware error in Inventory',
@@ -34,6 +38,6 @@ app.use((req, res, err, next) => {
     res.status(errObj.status).json(errObj.message)
 });
 
-app.listen(6002, () => {
-    console.log(`server listening on port ${6002}`);
+app.listen(6005, () => {
+    console.log(`server listening on port ${6005}`);
   });
