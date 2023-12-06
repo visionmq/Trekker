@@ -4,7 +4,6 @@ require('dotenv').config()
 const PORT = process.env.BILLING_PORT;
 const Orders = require('./OrdersSchema');
 const billConsume = require('./consumer');
-const billPublisher = require('./publisher');
 //const cors = require('cors');
 
 app.use(express.json());
@@ -15,22 +14,23 @@ app.use(express.json());
 //   app.use(cors(corsOptions));
 
 
-const msg = {
-    method: 'attempt-charge',
-    stage: 'pre-charge',
-    body: {
-        cardNum: '1111111111111111', 
-        total: 123.50,
-        user: {username: 'Justin'},
-        email: 'jcreyes917@gmail.com',
-    }
-};
+// const msg = {
+//     method: 'checkout',
+//     status: 'inv-preCharge-attempt-bill',
+//     body: {
+//         cardNum: '1111111111111111', 
+//         total: 123.50,
+//         user: {username: 'Justin'},
+//         email: 'jcreyes917@gmail.com',
+//     }
+// };
 
 
 
 app.use('/attempt-charge', async (req, res) => {
     
-    const {cardNum, total, user} = req.body;
+    const {cardNum, total, user, property} = req.body;
+    // TODO: add the property title to the incoming variables from the body and add it to the Orders Schema to log with the order 
     if (cardNum === '1111111111111111') {
         const last4Digits = cardNum.slice(-4);
         const maskedNumber = last4Digits.padStart(cardNum.length, '*');
@@ -38,13 +38,15 @@ app.use('/attempt-charge', async (req, res) => {
         const orderToStore = {
             total: total,
             cardNumber: maskedNumber,
-            user: user.username,
+            user: user,
+            property: property,
         }
         try {
+            console.log('trying to send this to the Orders DB: ', orderToStore)
             const storeOrder = await Orders.create(orderToStore);
             console.log('here is the created order id: ', storeOrder.id)
-            const orderID = {id: storeOrder.id};
-            res.status(200).send(orderID);
+            const order = {id: storeOrder.id, cardNumber: maskedNumber};
+            res.status(200).send(order);
         }
         catch (err) {
             console.log(err.message);
@@ -69,4 +71,3 @@ app.listen(PORT, () => {
 });
 
 billConsume();
-billPublisher('Bill', msg);

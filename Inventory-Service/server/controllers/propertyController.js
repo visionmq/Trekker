@@ -42,15 +42,41 @@ const { createClient } = require('@supabase/supabase-js');
  })
 
 
-propertyController.checkQuanity = (req,res,next) => {
-  const id = req.body._id
-  const query = Property.findOne({_id:id})
-  if(query){
+propertyController.checkQuanity = async (req,res,next) => {
+  console.log('ENTERED THE PROP CONTROLLER FOR CHECK QUANTITY')
+  // console.log(req.body)
+  const id = req.body.body.propertyID
+
+  const quantity = req.body.body.quantity
+
+  const query = await Property.findOne({_id:id})
+  console.log(query)
+
+
+  if(query.quantity >= quantity){
+    console.log('WE HAVE ENOUGH QUANTITY AVAILABLE')
+    req.body.status = 'inv-preCharge-attempt-bill'
+    return next()
+  } else {
+    console.log('WE DONT HAVE ENOUGH QUANTITY')
+    req.body.status = 'inv-preCharge-noAvail-app'
     return next()
   }
-  return next(err)
 }
 
+propertyController.updateQuantity = async(req,res,next) => {
+  const id = req.body.body.propertyID
+  const quantity = req.body.body.quantity
+
+  const query = await Property.findOne({_id:id})
+
+  const update = await Property.findByIdAndUpdate({_id:id},{quantity: query.quantity - quantity},{new: true});
+  req.body.status = 'inv-property-updated-app'
+  req.body.body.quantity = update.quantity
+next()
+}
+
+// const update = await Property.findByIdAndUpdate({_id:id},{quantity:query.quantity - quantity});
 
  module.exports = propertyController; 
 

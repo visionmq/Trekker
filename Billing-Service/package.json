@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Performs billing services for Houses-R-Us",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "nodemon server/server.js",
     "test": "jest --verbose"
   },
   "nodemonConfig": {

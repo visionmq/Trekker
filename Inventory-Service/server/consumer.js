@@ -1,4 +1,6 @@
 const amqp = require('amqplib/callback_api');
+const sendMsg = require('./publisher');
+const { send } = require('process');
 const exchangeName = 'trekker_topic';
 
 const receiveMsg = () => {
@@ -16,15 +18,15 @@ const receiveMsg = () => {
         'InvQueue',
         async function (msg) {
           const msgObj = JSON.parse(msg.content.toString());
-          console.log(`Message was received ${msgObj.method} sending to the switcher now`)
-          switch (msgObj.method) {
+          console.log(`Message was received ${msgObj.status} sending to the first switcher now`)
+          switch (msgObj.status) {
             case 'NewListing':
               try {
                 console.log('inside of newListing')
                 const result = await fetch('http://localhost:6002/newListing', {
                   method: 'POST',
                   headers: {
-                    'content-type': 'application/json'
+                    'Content-Type': 'application/json'
                   },
                   body: JSON.stringify(msgObj)
                 });
@@ -32,31 +34,52 @@ const receiveMsg = () => {
                 throw error;
               }
               break;
-            case 'UpdateQuantity':
+            case 'bill-postCharge-success-all':
               try {
                 console.log('inside of update quant')
-                const result = await fetch('http://localhost:6002/updateListing/:id', {
-                  method: 'PATCH',
-                  headers: {
-                    'content-type': 'application/json'
-                  },
-                  body: JSON.stringify(msgObj)
-                });
-              } catch (error) {
-                throw error;
-              }
-              break;
-            case 'CheckQuantity':
-              try {
-                console.log('inside of check quant')
-                const result = await fetch('http://localhost:6002/checkQuantity', {
+                const result = await fetch('http://localhost:6005/updateQuantity/', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify(msgObj)
                 });
-                console.log(result);
+                const response = await result.json();
+                sendMsg('App',response)
+              } catch (error) {
+                throw error;
+              }
+              break;
+            case 'app-preCharge-check-inv':
+              try {
+                console.log('inside of check quant')
+                const result = await fetch('http://localhost:6005/checkQuantity', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(msgObj)
+                });
+                const response = await result.json()
+                console.log('JUST GOT THE RESPONSE NOW SENDING TO SECOND SWITCHER')
+                switch (response.status){
+                  case 'inv-preCharge-noAvail-app':
+                    try {
+                      console.log('INSIDE OF SECOND SWITCH SENDING BACK TO APP')
+                      sendMsg('App',response)
+                    } catch (error) {
+                      throw error
+                    }
+                    break;
+                  case 'inv-preCharge-attempt-bill':
+                    try {
+                      console.log('INSIDE OF SECOND SWITCH SENDING TO BILLING')
+                      sendMsg('Bill',response)
+                    } catch (error) {
+                      throw error
+                    }
+                    break;
+                }
               } catch (error) {
                 throw error;
               }
@@ -71,4 +94,4 @@ const receiveMsg = () => {
   });
 };
 
-receiveMsg();
+module.exports = receiveMsg

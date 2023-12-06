@@ -18,27 +18,26 @@ const billConsume = () => {
         'BillQueue',
         async (msg) => {
           const msgObj = JSON.parse(msg.content.toString());
-          switch (msgObj.method) {
-            case 'attempt-charge':
+          switch (msgObj.status) {
+            case 'inv-preCharge-attempt-bill':
   
               console.log('Bill Consumer received: ', msgObj);
               const options = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify({cardNum: msgObj.body.cardNum, total: msgObj.body.total, user: msgObj.body.user}),
+                body: JSON.stringify({cardNum: msgObj.body.cardNum, total: msgObj.body.total, user: msgObj.body.userName, property: msgObj.body.property}),
               }
               try {
                
                 const attemptCharge = await fetch('http://localhost:5001/attempt-charge/', options);
                 const response = await attemptCharge.json();
                 console.log('Order ID from the server ', response);
-                if (attemptCharge.status < 299) {
+                if (attemptCharge.status < 300) {
                   msgObj.body.orderID = response.id;
                   msgObj.body.charged = true;
-                  msgObj.method = 'post-charge';
-                  msgObj.stage = 'sucessfully-charged'
-                  delete msgObj.body.cardNum;
-                  delete msgObj.body.total;
+                  msgObj.status = 'bill-postCharge-success-all'
+                  msgObj.body.cardNum = response.cardNumber;
+                  console.log('this is the msgObj sending from billing:', msgObj)
                   billPublisher('order.success', msgObj);
                 }
                 else {

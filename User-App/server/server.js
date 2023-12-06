@@ -36,7 +36,7 @@ app.post('/inv', async (req, res) => {
 app.post('/rabbit', async (req, res) => {
   console.log('Sending to rabbit');
   console.log(req.body);
-  await sendMsg('App', req.body.message);
+  await sendMsg('Inv', req.body.message);
   console.log('Rabbit message sent');
   res.send();
 });
@@ -110,6 +110,7 @@ wsserver.on('connection', (ws) => {
       channel.assertQueue('AppQueue');
       channel.bindQueue('AppQueue', exchangeName, 'App');
       channel.bindQueue('AppQueue', exchangeName, '#.success');
+      channel.bindQueue('AppQueue', exchangeName, '#.failed');
 
       channel.consume(
         'AppQueue',
