@@ -24,16 +24,16 @@ app.get('/', (req, res) => {
 
 app.post('/signin', authController.signin, (req, res) => {
     sendMsg('App', res.locals.msg)
-    res.status(200).json(res.locals.user)
+    res.status(200).json('complete')
 });
 
 app.post('/signup', authController.signup, (req, res) => {
-    // sendMsg('App', res.locals.msg)
-    res.status(200).json(res.locals.newUser)
+    sendMsg('App', res.locals.msg)
+    res.status(200).json('complete')
   });
 
 app.post('/checkout', authController.checkout, (req, res) => {
-    sendMsg('App', res.locals.msg)
+    sendMsg('App', req.body)
     res.status(200).json('complete')
   });
 

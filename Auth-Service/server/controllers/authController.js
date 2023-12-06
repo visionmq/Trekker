@@ -23,10 +23,9 @@ authController.signup = (req, res, next) => {
   //     };
   //     return next(error);
   // }
-  console.log('this is the body ', req.body)
   User.create({username: req.body.body.username, password: req.body.body.password, email: req.body.body.email, })
   .then((user) => {
-    // console.log(user, ' has been added to the database')
+    console.log(req.body.body.username, ' has been added to the database')
     res.locals.newUser = user
     return next();
   })
@@ -42,13 +41,12 @@ authController.signup = (req, res, next) => {
 authController.signin = async (req, res, next) => {
     const user = await User.findOne({username: req.body.body.username, password: req.body.body.password})
     if(!user) return res.status(404).send('User not found')
-    // console.log(user, ' has been logged in')
+    console.log(user.username, ' has been logged in')
     res.locals.user = user
     next();
 }
 
 authController.checkout = async(req, res, next) => {
-    console.log('this is req.body', req.body)
 
     User.updateOne({username: req.body.body.username}, {$push: {bookings: req.body.body.propertyID}})
     .then((bookings) => {
@@ -57,10 +55,7 @@ authController.checkout = async(req, res, next) => {
       .catch((err) => {
         return next(err);
       })
-
-    const user = await User.findOne({username: req.body.body.username})
-    console.log('this is user', user)
     next();
-}
+};
 
 module.exports = authController

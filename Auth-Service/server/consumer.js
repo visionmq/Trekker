@@ -15,10 +15,9 @@ const exchangeName = 'trekker_topic';
         'AuthQueue',
         async (msg) => {
         const msgObj = JSON.parse(msg.content.toString());
-            console.log(`[x] Auth received: ${msgObj.status}, now sending sending to switcher...`)
+          console.log(`[x] Auth received: ${msgObj.status}, now sending sending to switcher...`)
           switch(msgObj.status) {
             case 'app-signup-request-auth':
-              //{"method": "signup", "username": "", "password": ""}
               try{
             console.log(`[x] signup received: ${msgObj.status}`);
             const data = await fetch('http://localhost:4000/signup', {
@@ -35,7 +34,6 @@ const exchangeName = 'trekker_topic';
           }
           break
             case 'app-login-request-auth':
-               //{"method": "signup", "username": "", "password": ""}
               try{
             console.log(`[x] login received: ${msgObj.status}`);
             const data = await fetch('http://localhost:4000/signin', {
@@ -52,7 +50,6 @@ const exchangeName = 'trekker_topic';
           }
           break
           case 'bill-postCharge-success-all':
-             //{"username": "signup", "username": "", "bookings": ""}
               try{
             console.log(`[x] checkout received: ${msgObj.status}`);
             const data = await fetch('http://localhost:4000/checkout', {
@@ -77,5 +74,4 @@ const exchangeName = 'trekker_topic';
     });
   })
 }
-
 module.exports = receiveMsg
