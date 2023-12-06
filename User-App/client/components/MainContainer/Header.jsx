@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import logo from '../../assets/Trekker_final.png'
+import logo from '../../assets/Trekker(3).png'
 
 const Header = () => {
+
+  const location = useLocation()
+  let visibility = 'hidden';
 
   const rabbitTest = () => {
     console.log('sending a fetch to INV')
@@ -29,13 +33,15 @@ const Header = () => {
     });
   }
 
+  if(location.pathname !== '/') visibility = 'visible';
+
   return (
     <div id="header">
-      {/* <img src={logo}></img> */}
+      <Link className='top-buttons' to='/'><img src={logo}></img></Link>
+      <div id='search-bar' style={{visibility: visibility}}><input placeholder='Search'></input></div>
       <button id='test' onClick={rabbitTest}>Test Rabbit</button>
-      <Link className='top-buttons' to='/'><button>Home</button></Link>
-      <Link className='top-buttons' to='/search'><button>Search</button></Link>
-      <Link className='top-buttons' to='/listing'><button>Listing</button></Link>
+      {/* <Link className='top-buttons' to='/search'><button>Search</button></Link>
+      <Link className='top-buttons' to='/listing'><button>Listing</button></Link> */}
     </div>
   );
 };

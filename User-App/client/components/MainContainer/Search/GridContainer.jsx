@@ -1,5 +1,6 @@
 import React from "react";
 import GridResult from "./GridResult.jsx";
+import { Link } from "react-router-dom";
 
 const GridContainer = () => {
 
@@ -8,14 +9,17 @@ const GridContainer = () => {
     const gridResults = []
 
     for(let i = 0; i < 15; i++){
-      gridResults.push(<GridResult />)
+      gridResults.push(<Link to='/listing'><GridResult /></Link>)
+      //also needs to update redux for current listing
     }
     
   return (
-    <div id="search-left">
-      <h1>Results:</h1>
-      <div id="grid-container">
-        {gridResults}
+    <div id="search-inside">
+      <div id="search-left">
+        <h1>Results:</h1>
+        <div id="grid-container">
+          {gridResults}
+        </div>
       </div>
     </div>
   );

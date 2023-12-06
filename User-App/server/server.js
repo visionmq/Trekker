@@ -35,7 +35,7 @@ app.post('/inv', async (req, res) => {
 
 app.post('/rabbit', async (req, res) => {
   console.log('Sending to rabbit');
-  console.log(req.body);
+  // console.log(req.body.message);
   await sendMsg('Inv', req.body.message);
   console.log('Rabbit message sent');
   res.send();

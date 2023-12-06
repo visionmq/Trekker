@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import picture from '../../../assets/fireplace-416042_1280.jpg'
 
 const Welcome = () => {
@@ -16,7 +17,7 @@ const Welcome = () => {
                     <span id='divider'></span>
                     <div id='check-out'><h5>CHECK OUT</h5><input id="checkout-search" placeholder='End Date'></input></div>
                 </div>
-                <button><div>Search</div></button>
+                <Link id='link-search' to='/search'><button><div>Search</div></button></Link>
             </div>
             <div id='home-img'>
             <img ></img>
