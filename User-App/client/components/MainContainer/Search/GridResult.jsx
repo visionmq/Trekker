@@ -4,7 +4,7 @@ const GridResult = () => {
   //for loop to generate grid results
 
   return (
-    <div class="grid-result">
+    <div className="grid-result">
 
     </div>
   );

@@ -35,7 +35,7 @@ app.post('/inv', async (req, res) => {
 
 app.post('/rabbit', async (req, res) => {
   console.log('Sending to rabbit');
-  console.log(req.body);
+  // console.log(req.body.message);
   await sendMsg('Inv', req.body.message);
   console.log('Rabbit message sent');
   res.send();
@@ -90,7 +90,7 @@ wsserver.on('connection', (ws) => {
   };
 
   console.log('Websocket connected, turning on consumer');
-  ws.send('Websocket working');
+  ws.send('Websocket Server working');
 
   const socketSend = (msgObj) => {
     ws.send(msgObj);
