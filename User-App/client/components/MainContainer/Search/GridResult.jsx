@@ -1,5 +1,5 @@
 import React from "react";
-import pic from '/Users/jake/Desktop/Codesmith/Projects/OSP/Trekker/User-App/client/assets/bedroom-6778193_1280.jpg'
+import pic from '../../../assets/bedroom-6778193_1280.jpg'
 
 const GridResult = () => {
   //for loop to generate grid results
