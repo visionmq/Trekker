@@ -453,4 +453,111 @@ body {
     margin-bottom: .3vh;
     color: rgb(6, 188, 27);
     }
+
+    #toggle{
+    background-color: transparent;
+        border-radius: 10px;
+        border: 1px solid #7f3dbdd8;
+        color: #7f3dbdd8;
+        transition: all .1s ease 0s;
+        padding: 5px 10px;
+        font-weight: 700;
+        width: 9vw;
+    }
+    
+    #toggle:active {
+        // transform: scale(1.03, 1.03);
+        background-color: #dededeec;
+    }
+
+    #checkout-div {
+        border: 1px solid black;
+        height: 30vh;
+        width: 40vw;
+        padding: 1vw;
+        overflow: scroll;
+
+        
+        #reviews{
+            display: flex;
+            flex-direction: column;
+            .review {
+                padding-bottom: 2vw;
+    
+                display: flex;
+                img {
+                    width: 3vw;
+                    height: 3vw;
+                    border-radius: 3vw;
+                    margin-right: .5rem;
+                }
+    
+                span {
+                    
+                    h5 {
+                        font-size: .75rem;
+                    }
+                    p{  
+                        font-size: .75rem;
+                    }
+                }
+            }
+        }
+
+        #checkout-form {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+                // overflow: scroll;
+
+            h4 {
+                color: rgb(58, 58, 58);
+                font-size: .75rem;
+            }
+
+            .form-row {
+                display: flex;
+                    flex-direction: column;
+                    // justify-content: space-between;
+                    align-items: center;
+            }
+
+            #cc-name, #cc-number {
+                height: 5vh;
+                width: 37.5vw;
+                border: 1px solid rgb(194, 194, 194);
+                border-radius: 10rem;
+                padding-left: 10px;
+                // margin-left: 10px;
+            }
+
+            span {
+                display: flex;
+                justify-content: flex-end;
+                #cc-exp, #cc-sec {
+                    height: 5vh;
+                    width: 18.5vw;
+                    border: 1px solid rgb(194, 194, 194);
+                    border-radius: 10rem;
+                    padding-left: 10px;
+                    margin-left: 10px;
+                }
+            }
+            
+            button {
+                background: linear-gradient(.25turn, #cb6bc5d8, #7f3dbdd8);
+                border-radius: 10px;
+                border: 1px solid rgb(194, 194, 194);
+                color: white;
+                transition: all .1s ease 0s;
+                padding: 5px 10px;
+            }
+
+            button:active {
+                transform: scale(1.03, 1.03);
+                background-color: #7f3dbdec;
+            }
+        }
+    }
 }
