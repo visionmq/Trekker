@@ -9,7 +9,7 @@ const Header = () => {
   let visibility = 'hidden';
 
   const rabbitTest = () => {
-    console.log('sending a fetch to INV')
+    // console.log('sending a fetch to INV')
     fetch("/rabbit", {
       method: "POST",
       headers: { "Content-type": "application/json" },

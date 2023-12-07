@@ -1,6 +1,6 @@
-const User = require('../models/userModel.js')
+const User = require('../models/userModel.js');
 
-const authController = {}
+const authController = {};
 
 authController.signup = (req, res, next) => {
   // const {username, password} = req.body
@@ -23,39 +23,52 @@ authController.signup = (req, res, next) => {
   //     };
   //     return next(error);
   // }
-  User.create({username: req.body.body.username, password: req.body.body.password, email: req.body.body.email, })
-  .then((user) => {
-    console.log(req.body.body.username, ' has been added to the database')
-    res.locals.newUser = user
-    return next();
+  User.create({
+    username: req.body.body.userName,
+    password: req.body.body.password,
+    email: req.body.body.email,
   })
-  .catch((err) => {
-    return next({
-      log: 'there is an error in authController signin',
-      status: 400,
-      message: { err: err.message },
+    .then((user) => {
+      console.log(req.body.body.username, ' has been added to the database');
+      res.locals.newUser = user;
+      return next();
+    })
+    .catch((err) => {
+      return next({
+        log: 'there is an error in authController signin',
+        status: 400,
+        message: { err: err.message },
+      });
     });
-  })
 };
 
 authController.signin = async (req, res, next) => {
-    const user = await User.findOne({username: req.body.body.username, password: req.body.body.password})
-    if(!user) return res.status(404).send('User not found')
-    console.log(user.username, ' has been logged in')
-    res.locals.user = user
-    next();
-}
-
-authController.checkout = async(req, res, next) => {
-
-    User.updateOne({username: req.body.body.username}, {$push: {bookings: req.body.body.propertyID}})
-    .then((bookings) => {
-      console.log(`${req.body.body.propertyID} has been added to ${req.body.body.username}'s database`)
-      })
-      .catch((err) => {
-        return next(err);
-      })
-    next();
+  const user = await User.findOne({
+    username: req.body.body.userName,
+    password: req.body.body.password,
+  });
+  if (!user) return res.status(404).send('User not found');
+  console.log(user.username, ' has been logged in');
+  res.locals.user = user;
+  next();
 };
 
-module.exports = authController
+authController.checkout = async (req, res, next) => {
+  User.updateOne(
+    { username: req.body.body.userName },
+    { $push: { bookings: req.body.body.propertyID } }
+  )
+    .then((bookings) => {
+      console.log(
+        `${req.body.body.propertyID} has been added to ${req.body.body.userName}'s database`
+      );
+    })
+    .catch((err) => {
+      return next(err);
+    });
+  req.body.status = 'auth-booking-updated-app';
+  res.locals.body = req.body;
+  next();
+};
+
+module.exports = authController;

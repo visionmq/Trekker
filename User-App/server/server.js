@@ -123,6 +123,7 @@ wsserver.on('connection', (ws) => {
           //ws function
           console.log('This is socketsend: ', socketSend);
           socketSend(msgObj); //send json back to fe via ws with instructions in body
+          // setTimeout(() => socketSend(msgObj), 100);
         },
         {
           noAck: true,

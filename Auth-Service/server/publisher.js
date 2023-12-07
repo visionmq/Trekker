@@ -16,7 +16,7 @@ const sendMsg = async (key, msgObj) => {
 
   //sends out the msgObj to our topic exchange(exchangeName) with directions to our specified microservice(key)
   channel.publish(exchangeName, key, Buffer.from(JSON.stringify(msgObj)));
-  console.log(`[x] App just sent: ${msgObj}`);
+  console.log(`[x] Auth just sent: ${msgObj}`);
 
   setTimeout(() => {
     connection.close();
