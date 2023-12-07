@@ -385,7 +385,72 @@ body {
     }
 }
 
+.images{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 1vw;
+    // border: 1px solid black;
+    border-radius: 1vw;
+    width: 50%;
+
+    #bigImage{
+        // border: 1px solid black;
+        // padding: 2vw;
+        width: 40vw;
+        height: auto
+
+        img {
+        }
+    }
+    
+    .smallImages{
+        // height: 15vh;
+        display: flex;
+        justify-content: flex-start;
+        // padding: 3vw;
+        // overflow: hidden;
+        
+        div {
+            border: 1px solid black;
+            width: 8vw;
+            height: 8vw;
+            overflow: hidden;
+
+            img{
+                width: auto;
+                height: 8vw;
+            }
+        }
+    }
+}
+
+
 .listing {
-    border: 3px solid green;
+    // border: 3px solid orange;
     height: 90vh;
+    padding: 1vw;
+    display: flex;
+}
+
+.details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 3vw;
+        
+    h1{
+    margin-bottom: .3vh;
+    color: rgb(188, 6, 6);
+    }
+    p{
+    font-size: 2.5vh;
+    margin-bottom: .3vh;
+    color: rgb(58, 58, 58);
+    }
+    h3{
+    margin-bottom: .3vh;
+    color: rgb(6, 188, 27);
+    }
 }
