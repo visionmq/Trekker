@@ -17,7 +17,7 @@ const Checkout = () => {
   }
 
   return (
-    <>
+    <div>
     <button id='toggle' onClick={checkoutToggle}>{toggleText}</button>
     <div id="checkout-div">
       {!checkout && <div id="reviews">
@@ -34,7 +34,7 @@ const Checkout = () => {
         <button>Checkout</button>
       </div>}
     </div>
-    </>
+    </div>
   );
 };
 

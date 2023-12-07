@@ -1,11 +1,24 @@
 import React from "react";
+import Checkout from "./Checkout.jsx";
 
 const Details = () => {
   return (
-    <div class="details">
-        <h1>Chateau d'Jake</h1>
-        <p>Originally constructed in 1782 for John Leslie, 10th Earl of Roths, Chateau d'Jake will offer any Trekker a once in a lifetime adventure. While it may not be up to code, it offers a stunning view of the thames and a risk of tetanus at every turn. Chateau d'Jake is more than a house; it is a deathtrap.</p>
-        <h3>Listed by Bandersnatch LLC</h3>
+    <div id="details">
+      <div class="description">
+          <h1>Chateau d'Jake</h1>
+          <h3>Listed by Bandersnatch LLC</h3>
+          <p>Prepare for an extraordinary journey at Chateau d’Jake, a storied estate originally built in 1782 for the 10th Earl of Roths, John Leslie. This intriguing abode promises intrepid adventurers an experience unlike any other. While it might not meet contemporary building codes, this chateau boasts an unparalleled view of the Thames and an element of risk around every corner.</p>
+      </div>
+      <div id='listing-specs'>
+            <div id='features'>
+                <p><b>Bedrooms:</b> 700 Bedrooms</p>
+                <p><b>Bathrooms:</b> 100 Bathrooms</p>
+                <p><b>Kitchen:</b> 100 Kitchens</p>
+                <p><b>Living Space:</b> 100 Living rooms</p>
+                <p><b>Additional Features:</b> A full on-site staff.</p>
+            </div>
+          </div>
+      <Checkout />
     </div>
   );
 };
