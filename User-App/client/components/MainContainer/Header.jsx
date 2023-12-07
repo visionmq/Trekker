@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import logo from '../../assets/Trekker(3).png'
+import logo from '../../assets/Trekker(5).png'
 
 const Header = () => {
 
