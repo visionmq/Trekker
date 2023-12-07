@@ -93,6 +93,7 @@ wsserver.on('connection', (ws) => {
   ws.send('Websocket Server working');
 
   const socketSend = (msgObj) => {
+    console.log('in socket send: ', msgObj);
     ws.send(msgObj);
   };
 
@@ -101,7 +102,7 @@ wsserver.on('connection', (ws) => {
   // const receiveMsg = () => {
   amqp.connect('amqp://localhost', function (error, connection) {
     if (error) console.log(error);
-    // console.log('Connection established', connection);
+    console.log('Connection established for consumer');
 
     connection.createChannel(function (err, channel) {
       // console.log('err', err, 'channel', channel);
@@ -122,6 +123,7 @@ wsserver.on('connection', (ws) => {
           //ws function
           console.log('This is socketsend: ', socketSend);
           socketSend(msgObj); //send json back to fe via ws with instructions in body
+          // setTimeout(() => socketSend(msgObj), 100);
         },
         {
           noAck: true,
