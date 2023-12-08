@@ -27,7 +27,7 @@ app.post('/auth', async (req, res) => {
 });
 
 app.post('/inv', async (req, res) => {
-  await sendMsg('Inv', req.body.messsage); //message could be load or checkout
+  await sendMsg('Inv', req.body.message); //message could be load or checkout
   res.send();
 });
 

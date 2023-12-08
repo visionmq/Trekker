@@ -76,6 +76,18 @@ propertyController.updateQuantity = async(req,res,next) => {
 next()
 }
 
+propertyController.onLoad = async(req, res, next) => {
+
+ const properties = await Property.find({})
+
+//  req.body.body.properties = properties
+//  req.body.status = 'inv-load-success-app'
+ res.locals.msg = properties
+
+ console.log('THIS IS RES.LOCALS: ', res.locals.msg)
+ return next()
+}
+
 // const update = await Property.findByIdAndUpdate({_id:id},{quantity:query.quantity - quantity});
 
  module.exports = propertyController; 
