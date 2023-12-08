@@ -34,6 +34,18 @@ const receiveMsg = () => {
                 throw error;
               }
               break;
+            case 'app-load-request-inv':
+              try{
+                const result = await fetch('http://localhost:6005/onLoad/');
+                const response = await result.json();
+                msgObj.body.properties = response
+                msgObj.status = 'inv-load-success-app'
+                sendMsg('App',response)
+              }
+              catch (error){
+                throw error;
+              }
+            break;
             case 'bill-postCharge-success-all':
               try {
                 console.log('inside of update quant')

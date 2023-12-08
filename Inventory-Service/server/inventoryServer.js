@@ -24,11 +24,16 @@ app.post('/checkQuantity',propertyController.checkQuanity,(req,res) => {
     console.log('inside of checkQuantity in server file')
     // console.log(req.body)
     res.status(200).send(req.body)
-})
+});
 app.post('/updateQuantity',propertyController.updateQuantity,(req,res) => {
     console.log(req.body)
     res.status(200).send(req.body)
-})
+});
+
+app.get('/onLoad',propertyController.onLoad,(req,res) => {
+    res.status(200).send(res.locals.msg)
+});
+
 app.use((req, res, err, next) => {
     const defaultError = {
         log: 'There was an unknown middleware error in Inventory',
