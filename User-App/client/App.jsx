@@ -9,7 +9,9 @@ const App = () => {
   // ws_url.protocol = "wss:"; //secure protocal
   // ws_url.port = 443;
 
-  useEffect(() => dispatch({ socketAction: 'middlewareConnect'}), [])
+  const connectMiddleware = () => {
+    dispatch({ socketAction: 'middlewareConnect'})
+  };
 
   const getAllProps = async () => {
     try {
@@ -25,7 +27,7 @@ const App = () => {
 
   return (
     <Router>
-      <div id="app" onLoad={getAllProps}>
+      <div id="app" onLoad={() => {connectMiddleware(); getAllProps()}}>
         <MainContainer />
       </div>
     </Router>
