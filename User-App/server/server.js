@@ -33,11 +33,24 @@ app.post('/inv', async (req, res) => {
 
 //rabbitMQ endpoint for testing websocket
 
-app.post('/rabbit', async (req, res) => {
-  console.log('Sending to rabbit');
-  // console.log(req.body.message);
-  await sendMsg('Inv', req.body.message);
-  console.log('Rabbit message sent');
+// app.post('/rabbit', async (req, res) => {
+//   console.log('Sending to rabbit');
+//   // console.log(req.body.message);
+//   await sendMsg('Inv', req.body.message);
+//   console.log('Rabbit message sent');
+//   res.send();
+// });
+app.get('/rabbit', async (req, res) => {
+  console.log('in rabbit');
+  const response = await fetch('http://localhost:15672/api/overview', {
+    method: 'GET',
+    headers: {
+      Authorization: 'Basic ' + Buffer.from('guest:guest').toString('base64'),
+    },
+  });
+
+  const data = await response.json();
+  console.log(data);
   res.send();
 });
 

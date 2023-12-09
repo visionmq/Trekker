@@ -45,6 +45,10 @@ module.exports = {
       '/rabbit': 'http://localhost:3000',
       '/auth': 'http://localhost:3000',
       '/inv': 'http://localhost:3000',
+      '/api/*': {
+        target: 'http://localhost:15672/',
+        auth: 'guest:guest',
+      },
     },
   },
   plugins: [
