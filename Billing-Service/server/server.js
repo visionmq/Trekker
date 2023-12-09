@@ -67,7 +67,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`)
+    console.log(`Billing listening on port ${PORT}`)
 });
 
 billConsume();

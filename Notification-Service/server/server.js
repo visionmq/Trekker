@@ -20,5 +20,5 @@ app.use((error, req, res, next) => {
 
 app.listen(PORT, () => {
     notifConsume();
-    console.log(`listening on port ${PORT}`)
+    console.log(`Notification listening on port ${PORT}`)
 });

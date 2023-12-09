@@ -1,0 +1,19 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "Daddy JSON gets them all runnin",
+  "scripts": {
+    "start": "NODE_ENV=production node Auth-Service/server/server.js & node Billing-Service/server/server.js & node Inventory-Service/server/server.js & node Notification-Service/server/server.js & NODE_ENV=development webpack serve & NODE_ENV=development node User-App/server/server.js",
+    "kill": "npx kill-port 4000 & npx kill-port 5001 & npx kill-port 6005 & 7001 & npx kill-port 3000 & npx kill-port 8080"
+  },
+  "author": "Cheri, Jackson, Jake, Justin",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "webpack": "^5.89.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}

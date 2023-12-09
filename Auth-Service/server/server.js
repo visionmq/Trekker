@@ -46,5 +46,5 @@ app.post('/checkout', authController.checkout, (req, res) => {
 
 app.listen(4000, () => {
   receiveMsg();
-  console.log(`listening on port ${PORT}`);
+  console.log(`Auth listening on port ${PORT}`);
 });
