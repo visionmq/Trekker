@@ -1,4 +1,6 @@
 // import { createSlice } from '@reduxjs/toolkit';
+import { useDispatch } from "react-redux";
+import { updateAllProperties } from "./propertySlice";
 
 const websocketMiddleware = (wsUrl) => {
   let socket = null;
@@ -33,6 +35,14 @@ const websocketMiddleware = (wsUrl) => {
           socket.onmessage = onMessage(store);
         }
         break;
+
+        case 'orderComplete':
+        //dispatch redux reducer to change state 
+        break;
+
+        case 'updateInventoryState':
+          dispatch(updateAllProperties({properties: action.properties}));
+          break;
       default:
         return next(action);
     }

@@ -3,11 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 export const propertySlice = createSlice({
   name: 'property',
   initialState: {
+    allProperties: [],
     propertyName: undefined,
     propertyLocation: undefined,
     availableDates: [],
   },
   reducers: {
+    updateAllProperties: (state, action) => {
+      state.allProperties = action.properties; 
+    },
     updatePropertyName: (state, action) => {
       const title = action.title;
       state.propertyName = title;
@@ -24,6 +28,7 @@ export const propertySlice = createSlice({
 });
 
 export const {
+  updateAllProperties,
   updateAvailableDates,
   updatePropertyLocation,
   updatePropertyName,
