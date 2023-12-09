@@ -22,30 +22,27 @@ app.get('/', (req, res) => {
   res.status(200).send('In Auth');
 });
 
-app.post('/signin', authController.signin, (req, res) => {
-  sendMsg('App', res.locals.msg);
-  res.status(200).json('complete');
-});
-
-app.post('/signup', authController.signup, (req, res) => {
-  sendMsg('App', res.locals.msg);
-  res.status(200).json('complete');
-});
-
-app.post('/checkout', authController.checkout, (req, res) => {
-  // sendMsg('App', req.body)
+app.post('/login', authController.login, (req, res) => {
   res.status(200).json(res.locals.body);
 });
 
-app.use((req, res, err, next) => {
-  const defaultError = {
-    log: 'There was an unknown middleware error in Authentication',
-    status: 500,
-    message: "Housten, there's been an authentication problem",
-  };
-  const errObj = Object.assign(defaultError, err);
-  res.status(errObj.status).json(errObj.message);
+app.post('/signup', authController.signup, (req, res) => {
+  res.status(200).json(res.locals.body);
 });
+
+app.post('/checkout', authController.checkout, (req, res) => {
+  res.status(200).json(res.locals.body);
+});
+
+// app.use((req, res, err, next) => {
+//   const defaultError = {
+//     log: 'There was an unknown middleware error in Authentication',
+//     status: 500,
+//     message: "Housten, there's been an authentication problem",
+//   };
+//   const errObj = Object.assign(defaultError, err);
+//   res.status(errObj.status).json(errObj.message);
+// });
 
 app.listen(4000, () => {
   receiveMsg();

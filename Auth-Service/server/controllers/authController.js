@@ -3,7 +3,8 @@ const User = require('../models/userModel.js');
 const authController = {};
 
 authController.signup = (req, res, next) => {
-  // const {username, password} = req.body
+  // const username = req.body.body.userName
+  // const password = req.body.body.password
   // const usernameReg = new RegExp("^(?=.*[!@#$%^&*()_+=[]{};':\",./<>?~`])$");
   // const passwordReg = new RegExp("^(?=.*[A-Za-z])(?=.*?[0-9])(?=.*?[?!.'$])[A-Za-z0-9?!.$']{8,}$");
   // //"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d?!.$']{5,}$"
@@ -29,27 +30,36 @@ authController.signup = (req, res, next) => {
     email: req.body.body.email,
   })
     .then((user) => {
-      console.log(req.body.body.username, ' has been added to the database');
-      res.locals.newUser = user;
+      console.log(user.username, ' has been added to the database');
+      console.log('this is the user object: ', user)
+      req.body.body.properties = user.bookings;
+      req.body.body.password = ""
+      req.body.status = "auth-signup-success-app"
+      res.locals.body = req.body
       return next();
     })
-    .catch((err) => {
-      return next({
-        log: 'there is an error in authController signin',
-        status: 400,
-        message: { err: err.message },
-      });
-    });
+    // .catch((err) => {
+    //   return next({
+    //     log: 'there is an error in authController signin',
+    //     status: 400,
+    //     message: { err: err.message },
+    //   });
+    // });
 };
 
-authController.signin = async (req, res, next) => {
+authController.login = async (req, res, next) => {
   const user = await User.findOne({
     username: req.body.body.userName,
     password: req.body.body.password,
   });
-  if (!user) return res.status(404).send('User not found');
+
+  if (!user) return res.status(200).send('failure');
   console.log(user.username, ' has been logged in');
-  res.locals.user = user;
+  console.log('this is the user object: ', user)
+  req.body.body.password = ""
+  req.body.body.properties = user.bookings
+  req.body.status = "auth-login-sucess-app"
+  res.locals.body = req.body;
   next();
 };
 

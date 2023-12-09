@@ -29,7 +29,9 @@ const receiveMsg = () => {
                   },
                   body: JSON.stringify(msgObj),
                 });
-                sendMsg('App', data);
+                const response = await data.json();
+                console.log('signup response: ', response);
+                sendMsg('App', response);
               } catch (err) {
                 console.log('signup error is: ', err.message);
               }
@@ -37,16 +39,18 @@ const receiveMsg = () => {
             case 'app-login-request-auth':
               try {
                 console.log(`[x] login received: ${msgObj.status}`);
-                const data = await fetch('http://localhost:4000/signin', {
+                const data = await fetch('http://localhost:4000/login', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify(msgObj),
                 });
-                sendMsg('App', data);
+                const response = await data.json();
+                console.log('login response: ', response);
+                sendMsg('App', response);
               } catch (err) {
-                console.log('signin error is: ', err.message);
+                console.log('login error is: ', err.message);
               }
               break;
             case 'bill-postCharge-success-all':
@@ -60,7 +64,7 @@ const receiveMsg = () => {
                   body: JSON.stringify(msgObj),
                 });
                 const response = await data.json();
-                console.log('this is the response: ', response);
+                console.log('checkout response: ', response);
                 sendMsg('App', response);
               } catch (err) {
                 console.log('checkout error is: ', err.message);
