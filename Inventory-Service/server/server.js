@@ -2,10 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
-const PORT = process.env.INVENTORY_PORT //NOT working lol
+require('dotenv').config();
+const PORT = process.env.INVENTORY_PORT; //NOT working lol
 const propertyController = require('./controllers/propertyController');
 const receiveMsg = require('./consumer');
-require('dotenv').config();
 
 const mongoURI = process.env.MONGO_URI_PROPERTIES //NOT working lol
 
@@ -44,7 +44,7 @@ app.use((req, res, err, next) => {
     res.status(errObj.status).json(errObj.message)
 });
 
-app.listen(6005, () => {
+app.listen(PORT, () => {
     receiveMsg()
-    console.log(`server listening on port ${6005}`);
+    console.log(`Inventory server listening on port ${PORT}`);
   });

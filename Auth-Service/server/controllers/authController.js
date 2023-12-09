@@ -3,53 +3,48 @@ const User = require('../models/userModel.js');
 const authController = {};
 
 authController.signup = (req, res, next) => {
-  // const {username, password} = req.body
-  // const usernameReg = new RegExp("^(?=.*[!@#$%^&*()_+=[]{};':\",./<>?~`])$");
-  // const passwordReg = new RegExp("^(?=.*[A-Za-z])(?=.*?[0-9])(?=.*?[?!.'$])[A-Za-z0-9?!.$']{8,}$");
-  // //"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d?!.$']{5,}$"
-  // if (usernameReg.test(username)) {
-  //     const error = {
-  //         log: 'Username cannot contain any special characters.',
-  //         status: 400,
-  //         message: {err: 'Username did not pass the requirements.'},
-  //     };
-  //     return next(error)
-  // }
-  // if (!passwordReg.test(password)) {
-  //     const error = {
-  //         log: 'Password either contains incorrect special characters, is not the correct length, or does not have at least one letter and one number present. Can only include the following special characters: ?, !, ., $, \'.',
-  //         status: 400,
-  //         message: {err: 'Password did not pass the requirements.'},
-  //     };
-  //     return next(error);
-  // }
+  const username = req.body.body.userName
+  const password = req.body.body.password
+  const usernameReg = new RegExp("^(?=.*[!@#$%^&*()_+=[]{};':\",./<>?~`])$");
+  const passwordReg = new RegExp("^(?=.*[A-Za-z])(?=.*?[0-9])(?=.*?[?!.'$])[A-Za-z0-9?!.$']{8,}$");
+  if (usernameReg.test(username)) {
+      return res.status(200).json("Username had invalid chars")
+  }
+  if (passwordReg.test(password)) {
+    return res.status(200).json("Password had invalid chars")
+  }
   User.create({
     username: req.body.body.userName,
     password: req.body.body.password,
     email: req.body.body.email,
   })
     .then((user) => {
-      console.log(req.body.body.username, ' has been added to the database');
-      res.locals.newUser = user;
+      console.log(user.username, ' has been added to the database');
+      console.log('this is the user object: ', user)
+      req.body.body.properties = user.bookings;
+      req.body.body.password = ""
+      req.body.status = "auth-signup-success-app"
+      res.locals.body = req.body
       return next();
     })
     .catch((err) => {
-      return next({
-        log: 'there is an error in authController signin',
-        status: 400,
-        message: { err: err.message },
-      });
+      return res.status(200).json("Username was taken")
     });
 };
 
-authController.signin = async (req, res, next) => {
+authController.login = async (req, res, next) => {
   const user = await User.findOne({
     username: req.body.body.userName,
     password: req.body.body.password,
   });
-  if (!user) return res.status(404).send('User not found');
+
+  if (!user) return res.status(200).json("That's not it chief");
   console.log(user.username, ' has been logged in');
-  res.locals.user = user;
+  console.log('this is the user object: ', user)
+  req.body.body.password = ""
+  req.body.body.properties = user.bookings
+  req.body.status = "auth-login-sucess-app"
+  res.locals.body = req.body;
   next();
 };
 
