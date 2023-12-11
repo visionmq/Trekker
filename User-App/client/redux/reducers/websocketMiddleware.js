@@ -23,6 +23,8 @@ const websocketMiddleware = (wsUrl) => {
     dispatch = useDispatch();
     const socketAction = action.socketAction;
 
+    console.log('Websocket has received a message. Here are the contents: ', action);
+    
     switch (socketAction) {
       case 'middlewareConnect':
         console.log('[x] Frontend Has Opened Websocket in Middleware');
