@@ -4,13 +4,18 @@ export const propertySlice = createSlice({
   name: 'property',
   initialState: {
     allProperties: [],
+    loadStatus: null,
     propertyName: undefined,
     propertyLocation: undefined,
-    availableDates: [],
+    availableDates: undefined,
   },
   reducers: {
+    updateLoadState: (state, action) => {
+      state.loadStatus = action.status;
+    },
     updateAllProperties: (state, action) => {
       state.allProperties = action.properties; 
+      state.loadStatus = action.status;
     },
     updatePropertyName: (state, action) => {
       const title = action.title;
@@ -21,13 +26,13 @@ export const propertySlice = createSlice({
       state.propertyLocation = location;
     },
     updateAvailableDates: (state, action) => {
-      const dates = action.dates;
-      state.availableDates = dates;
+      state.availableDates = action.quantity;
     },
   },
 });
 
 export const {
+  updateLoadState,
   updateAllProperties,
   updateAvailableDates,
   updatePropertyLocation,

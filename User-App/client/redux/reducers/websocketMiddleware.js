@@ -1,6 +1,8 @@
-// import { createSlice } from '@reduxjs/toolkit';
 import { useDispatch } from "react-redux";
-import { updateAllProperties } from "./propertySlice";
+import { updateAllProperties, updateAvailableDates, updateLoadState } from "./propertySlice";
+import { checkoutOutcome } from "./checkoutSlice";
+import { signupCurrentUser, loginCurrentUser, failedLogin, failedSignup,  } from "./userSlice";
+
 
 const websocketMiddleware = (wsUrl) => {
   let socket = null;
@@ -15,12 +17,10 @@ const websocketMiddleware = (wsUrl) => {
 
   const onMessage = (store) => (event) => {
     console.log('Received Message: ', event.data);
-    // let message;
-
-    //switch case to distribute actions based on websocket incoming message:
   };
 
   return (store) => (next) => (action) => {
+    dispatch = useDispatch();
     const socketAction = action.socketAction;
 
     switch (socketAction) {
@@ -36,13 +36,42 @@ const websocketMiddleware = (wsUrl) => {
         }
         break;
 
-        case 'orderComplete':
-        //dispatch redux reducer to change state 
-        break;
-
         case 'updateInventoryState':
-          dispatch(updateAllProperties({properties: action.properties}));
+          dispatch(updateAllProperties({properties: action.properties, status: 'success'}));
           break;
+
+        case 'propertySearchFailed':
+          dispatch(updateLoadState({status: 'failed'})) 
+          break;
+        
+        case 'noAvail':
+          dispatch(updateAvailableDates({quantity: 0}))
+          break; //I might need to come back and change this based on how the components subscribe to state 
+        
+        case 'orderComplete': 
+        dispatch(checkoutOutcome({outcome: true}))
+          break;
+
+        case 'billingFailed':
+          dispatch(checkoutOutcome({outcome: false}))
+          break;
+
+        case 'signupSuccessful':
+          dispatch(signupCurrentUser({userInfo: action.user }));
+          break;
+
+        case 'signupFailed':
+          dispatch(failedLogin());
+          break;
+
+        case 'loginSuccessful':
+          dispatch(loginCurrentUser({userInfo: action.user }));
+          break;
+
+        case 'loginFailed':
+          dispatch(failedSignup());
+          break;
+
       default:
         return next(action);
     }

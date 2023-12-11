@@ -4,19 +4,36 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: {
     isLoggedIn: false,
+    signupAttempt: undefined,
+    loginAttempt: undefined,
     currentUser: {},
   },
   reducers: {
-    loggedIn: (state, action) => {
+    signupCurrentUser: (state, action) => {
+      state.signupAttempt = true;
       state.isLoggedIn = true;
+      state.currentUser = action.userInfo;
     },
-    updateCurrentUser: (state, action) => {
-      const user = action.userInfo;
-      state.currentUser = user;
+    failedSignup: (state, action) => {
+      state.signupAttempt = false;
     },
+    loginCurrentUser: (state, action) => {
+      state.loginAttempt = true;
+      state.isLoggedIn = true;
+      state.currentUser = action.userInfo;
+    },
+    failedLogin: (state, action) => {
+      state.loginAttempt = false;
+    },
+    logOut: (state, action) => {
+      state.isLoggedIn = false;
+      state.signupAttempt = undefined;
+      state.loginAttempt = undefined;
+      state.currentUser = {};
+    }
   },
 });
 
-export const { loggedIn, updateCurrentUser } = userSlice.actions;
+export const { signupCurrentUser, failedSignup, loginCurrentUser, failedLogin, logOut } = userSlice.actions;
 
 export default userSlice.reducer;

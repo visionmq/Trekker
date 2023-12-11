@@ -132,6 +132,7 @@ wsserver.on('connection', (ws) => {
             case 'inv-preCharge-noAvail-app':
               socketSend({socketAction: 'noAvail', properties: msgObj.body.properties})
               break;
+              
             case 'bill-postCharge-success-all':
               socketSend({socketAction: 'orderComplete', body: msgObj.body})
             break;
@@ -139,10 +140,6 @@ wsserver.on('connection', (ws) => {
             case 'bill-postCharge-failed-app':
               socketSend({socketAction: 'billingFailed'})
               break;
-            
-            case 'bill-postCharge-success-all':
-              socketSend({socketAction: 'orderComplete', body: msgObj.body})
-            break;
 
             case 'auth-signup-success-app': 
               socketSend({socketAction: 'signupSuccessful', user: msgObj.user})
@@ -159,6 +156,7 @@ wsserver.on('connection', (ws) => {
             case 'auth-login-failed-app':
               socketSend({socketAction: 'loginFailed'})
               break;
+
             default:
               console.log('server could not find a route for the message it received.')
           }
