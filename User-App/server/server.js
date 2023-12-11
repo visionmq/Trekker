@@ -120,10 +120,47 @@ wsserver.on('connection', (ws) => {
           console.log(
             `[x] App received: ${msgObj}, now sending thru websocket...`
           );
-          //ws function
-          console.log('This is socketsend: ', socketSend);
-          socketSend(msgObj); //send json back to fe via ws with instructions in body
-          // setTimeout(() => socketSend(msgObj), 100);
+          switch (msgObj.status) {
+            case 'inv-property-updated-app':
+              socketSend({socketAction: 'updateInventoryState', properties: msgObj.body.properties}); 
+              break;
+
+            case 'inv-load-failed-app':
+              socketSend({socketAction: 'propertySearchFailed'}); 
+              break;
+
+            case 'inv-preCharge-noAvail-app':
+              socketSend({socketAction: 'noAvail', properties: msgObj.body.properties})
+              break;
+              
+            case 'bill-postCharge-success-all':
+              socketSend({socketAction: 'orderComplete', body: msgObj.body})
+            break;
+
+            case 'bill-postCharge-failed-app':
+              socketSend({socketAction: 'billingFailed'})
+              break;
+
+            case 'auth-signup-success-app': 
+              socketSend({socketAction: 'signupSuccessful', user: msgObj.user})
+              break;
+            
+            case 'auth-signup-failed-app':
+              socketSend({socketAction: 'signupFailed'})
+              break;
+
+            case 'auth-login-sucess-app': 
+            socketSend({socketAction: 'loginSuccessful', user: msgObj.user})
+              break;
+            
+            case 'auth-login-failed-app':
+              socketSend({socketAction: 'loginFailed'})
+              break;
+
+            default:
+              console.log('server could not find a route for the message it received.')
+          }
+          
         },
         {
           noAck: true,
