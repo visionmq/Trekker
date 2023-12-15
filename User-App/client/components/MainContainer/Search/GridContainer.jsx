@@ -1,11 +1,12 @@
 import React from "react";
+import { useState } from "react";
 import GridResult from "./GridResult.jsx";
 import { Link } from "react-router-dom";
 
 const GridContainer = () => {
 
     //for loop to generate grid results
-
+    const properties = useSelector((state) => {return state.property.allProperties})
     const gridResults = []
 
     for(let i = 0; i < 25; i++){

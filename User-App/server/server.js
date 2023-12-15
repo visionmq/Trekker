@@ -26,9 +26,17 @@ app.post('/auth', async (req, res) => {
   res.send();
 });
 
-app.post('/inv', async (req, res) => {
-  await sendMsg('Inv', req.body.message); //message could be load or checkout
-  res.send();
+app.get('/inv', (req, res) => {
+  const message = {
+    method: 'load',
+    status: 'app-load-request-inv',
+    body: {
+      properties: [],
+    }
+  }
+  console.log('about to send a message to inv')
+  sendMsg('Inv', message); //message could be load or checkout
+  res.sendStatus(200);
 });
 
 //rabbitMQ endpoint for testing websocket
@@ -93,7 +101,7 @@ wsserver.on('connection', (ws) => {
   ws.send('Websocket Server working');
 
   const socketSend = (msgObj) => {
-    console.log('in socket send: ', msgObj);
+    console.log('in socket send: ');
     ws.send(msgObj);
   };
 
@@ -115,16 +123,25 @@ wsserver.on('connection', (ws) => {
 
       channel.consume(
         'AppQueue',
-        (msg) => {
-          const msgObj = msg.content.toString();
-          console.log(
-            `[x] App received: ${msgObj}, now sending thru websocket...`
-          );
+        async (msg) => {
+          let msgObj
+          try {
+            msgObj = JSON.parse(msg.content); //.toString()
+            console.log('this is the message parsed: ', msgObj.status)
+          }
+          catch (err) {
+            console.log('App server could not parse the incoming message.')
+          }
           switch (msgObj.status) {
-            case 'inv-property-updated-app':
-              socketSend({socketAction: 'updateInventoryState', properties: msgObj.body.properties}); 
+            case 'inv-property-updated-app': //this probably needs to be changed
+              ws.send(JSON.stringify({socketAction: 'updateInventoryState', properties: msgObj.body.properties})); 
               break;
 
+            case 'inv-load-success-app':
+              const data = JSON.stringify({socketAction: 'updateInventoryState', properties: msgObj.body.properties});
+              console.log('sending properties to the websocket')
+              ws.send(data); 
+              break;
             case 'inv-load-failed-app':
               socketSend({socketAction: 'propertySearchFailed'}); 
               break;

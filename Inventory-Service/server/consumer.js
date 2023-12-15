@@ -18,34 +18,38 @@ const receiveMsg = () => {
         'InvQueue',
         async function (msg) {
           const msgObj = JSON.parse(msg.content.toString());
-          console.log(`Message was received ${msgObj.status} sending to the first switcher now`)
+          console.log(`Message was received ${msgObj.status} filtering by status to determine action`)
           switch (msgObj.status) {
             case 'NewListing':
               try {
                 console.log('inside of newListing')
-                const result = await fetch('http://localhost:6002/newListing', {
+                const result = await fetch('http://localhost:6005/newListing', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify(msgObj)
                 });
-              } catch (error) {
+              } 
+              catch (error) {
                 throw error;
               }
               break;
             case 'app-load-request-inv':
-              try{
+              try {
                 const result = await fetch('http://localhost:6005/onLoad/');
-                const response = await result.json();
-                msgObj.body.properties = response
-                msgObj.status = 'inv-load-success-app'
-                sendMsg('App',response)
+                if (result.ok) {
+                  const response = await result.json();
+                  msgObj.body.properties = response
+                  msgObj.status = 'inv-load-success-app'
+                  sendMsg('App', msgObj)
+                }
+
               }
-              catch (error){
+              catch (error) {
                 throw error;
               }
-            break;
+              break;
             case 'bill-postCharge-success-all':
               try {
                 console.log('inside of update quant')
@@ -57,8 +61,9 @@ const receiveMsg = () => {
                   body: JSON.stringify(msgObj)
                 });
                 const response = await result.json();
-                sendMsg('App',response)
-              } catch (error) {
+                sendMsg('App', response)
+              } 
+              catch (error) {
                 throw error;
               }
               break;
@@ -74,11 +79,11 @@ const receiveMsg = () => {
                 });
                 const response = await result.json()
                 console.log('JUST GOT THE RESPONSE NOW SENDING TO SECOND SWITCHER')
-                switch (response.status){
+                switch (response.status) {
                   case 'inv-preCharge-noAvail-app':
                     try {
                       console.log('INSIDE OF SECOND SWITCH SENDING BACK TO APP')
-                      sendMsg('App',response)
+                      sendMsg('App', response)
                     } catch (error) {
                       throw error
                     }
@@ -86,7 +91,7 @@ const receiveMsg = () => {
                   case 'inv-preCharge-attempt-bill':
                     try {
                       console.log('INSIDE OF SECOND SWITCH SENDING TO BILLING')
-                      sendMsg('Bill',response)
+                      sendMsg('Bill', response)
                     } catch (error) {
                       throw error
                     }

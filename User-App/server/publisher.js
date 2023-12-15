@@ -12,7 +12,7 @@ const sendMsg = (key, msgObj) => {
       channel.assertExchange(exchangeName, 'topic', { durable: true });
 
       channel.publish(exchangeName, key, Buffer.from(JSON.stringify(msgObj)));
-      console.log(`[x] App just sent: ${msgObj}`);
+      console.log(`Publisher: App just sent: ${msgObj}`);
 
       setTimeout(() => {
         connection.close();

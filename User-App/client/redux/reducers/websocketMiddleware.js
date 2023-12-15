@@ -1,85 +1,95 @@
-import { useDispatch } from "react-redux";
 import { updateAllProperties, updateAvailableDates, updateLoadState } from "./propertySlice";
 import { checkoutOutcome } from "./checkoutSlice";
 import { signupCurrentUser, loginCurrentUser, failedLogin, failedSignup,  } from "./userSlice";
 
 
+
+
 const websocketMiddleware = (wsUrl) => {
   let socket = null;
-
+  
   const onOpen = (store) => (event) => {
     /**Not Used */
   };
-
+  
   const onClose = (store) => (event) => {
     /**Not Used */
   };
 
-  const onMessage = (store) => (event) => {
-    console.log('Received Message: ', event.data);
-  };
-
-  return (store) => (next) => (action) => {
-    dispatch = useDispatch();
-    const socketAction = action.socketAction;
-
-    console.log('Websocket has received a message. Here are the contents: ', action);
+  const onMessage = (store) => async (event) => {
+    //console.log('we hit inside of the onMessage in the middleware for websocket')
+    let message 
     
-    switch (socketAction) {
-      case 'middlewareConnect':
-        console.log('[x] Frontend Has Opened Websocket in Middleware');
-
-        if (socket === null) {
-          // Create a new WebSocket connection
-          socket = new WebSocket(wsUrl);
-          socket.onopen = onOpen(store);
-          socket.onclose = onClose(store);
-          socket.onmessage = onMessage(store);
-        }
-        break;
-
+    try {
+      message = await JSON.parse(JSON.stringify(event.data));
+      console.log('onMessage event: ', event.data)
+    }
+    catch (err) {
+      console.log('There was an error parsing the message data. ')
+    }
+    
+  };
+    return (store) => (next) => (action) => {
+      //action = JSON.parse(action.toString)
+      console.log('here', action.socketAction)
+      const socketAction = action.socketAction;
+  
+      console.log('Websocket has received a message. Here are the contents: ', action);
+      
+      switch (socketAction) {
+        case 'middlewareConnect':
+          console.log('Frontend Has Opened Websocket in Middleware');
+  
+          if (socket === null) {
+            // Create a new WebSocket connection
+            socket = new WebSocket(wsUrl);
+            socket.onopen = onOpen(store);
+            socket.onclose = onClose(store);
+            socket.onmessage = onMessage(store);
+          }
+          break;
         case 'updateInventoryState':
-          dispatch(updateAllProperties({properties: action.properties, status: 'success'}));
+              store.dispatch(updateAllProperties({properties: action.properties, status: 'success'}));
           break;
-
+  
         case 'propertySearchFailed':
-          dispatch(updateLoadState({status: 'failed'})) 
+            store.dispatch(updateLoadState({status: 'failed'})) 
           break;
-        
+          
         case 'noAvail':
-          dispatch(updateAvailableDates({quantity: 0}))
+          store.dispatch(updateAvailableDates({quantity: 0}))
           break; //I might need to come back and change this based on how the components subscribe to state 
         
         case 'orderComplete': 
-        dispatch(checkoutOutcome({outcome: true}))
+        store.dispatch(checkoutOutcome({outcome: true}))
           break;
 
         case 'billingFailed':
-          dispatch(checkoutOutcome({outcome: false}))
+          store.dispatch(checkoutOutcome({outcome: false}))
           break;
 
         case 'signupSuccessful':
-          dispatch(signupCurrentUser({userInfo: action.user }));
+          store.dispatch(signupCurrentUser({userInfo: action.user }));
           break;
 
         case 'signupFailed':
-          dispatch(failedLogin());
+          store.dispatch(failedSignup({}));
           break;
 
         case 'loginSuccessful':
-          dispatch(loginCurrentUser({userInfo: action.user }));
+          store.dispatch(loginCurrentUser({userInfo: action.user }));
           break;
 
         case 'loginFailed':
-          dispatch(failedSignup());
+          store.dispatch(failedLogin({}));
           break;
-
-      default:
-        return next(action);
-    }
+      }
+    };
   };
-};
 
-// export const {  } = websocketSlice.actions;
+
 
 export default websocketMiddleware;
+
+
+
