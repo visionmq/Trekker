@@ -30,7 +30,7 @@ app.post('/updateQuantity',propertyController.updateQuantity,(req,res) => {
     res.status(200).send(req.body)
 });
 
-app.get('/onLoad',propertyController.onLoad,(req,res) => {
+app.get('/onLoad', propertyController.onLoad, (req,res) => {
     res.status(200).send(res.locals.msg)
 });
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MainContainer from "./components/MainContainer/MainContainer.jsx";
 import { BrowserRouter as Router} from "react-router-dom";
 import { useDispatch } from 'react-redux'
@@ -8,12 +8,14 @@ const App = () => {
   // let ws_url = new URL(window.location.href)
   // ws_url.protocol = "wss:"; //secure protocal
   // ws_url.port = 443;
-
+  console.log('in the App.js')
   const connectMiddleware = () => {
+    console.log('connecting to websocket')
     dispatch({ socketAction: 'middlewareConnect'})
   };
-
+  
   const getAllProps = async () => {
+    console.log('requesting props')
     try {
       const sendGet = await fetch('/inv');
       if (sendGet.status < 300) {
@@ -27,7 +29,10 @@ const App = () => {
 
   return (
     <Router>
-      <div id="app" onLoad={() => {connectMiddleware(); getAllProps()}}>
+      <div id="app" onLoad={() => {
+        connectMiddleware(); 
+        getAllProps()
+        }}>
         <MainContainer />
       </div>
     </Router>

@@ -77,7 +77,8 @@ next()
 }
 
 propertyController.onLoad = async(req, res, next) => {
-
+  console.log('in the onLoad middleware')
+  try {
  const properties = await Property.find({})
 
 //  req.body.body.properties = properties
@@ -86,6 +87,10 @@ propertyController.onLoad = async(req, res, next) => {
 
  console.log('THIS IS RES.LOCALS: ', res.locals.msg)
  return next()
+  } 
+  catch (err) {
+    console.log(err)
+  }
 }
 
 // const update = await Property.findByIdAndUpdate({_id:id},{quantity:query.quantity - quantity});
