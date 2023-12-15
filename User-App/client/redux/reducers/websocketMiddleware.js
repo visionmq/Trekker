@@ -5,6 +5,7 @@ import { signupCurrentUser, loginCurrentUser, failedLogin, failedSignup,  } from
 
 
 
+
 const websocketMiddleware = (wsUrl) => {
   let socket = null;
   
@@ -17,38 +18,12 @@ const websocketMiddleware = (wsUrl) => {
   };
 
   const onMessage = (store) => async (event) => {
-    //console.log('we hit inside of the onMessage in the middleware for websocket')
-    let message 
-    
+    let action 
     try {
-      message = await JSON.parse(JSON.stringify(event.data));
-      console.log('onMessage event: ', event.data)
-    }
-    catch (err) {
-      console.log('There was an error parsing the message data. ')
-    }
-    
-  };
-    return (store) => (next) => (action) => {
-      //action = JSON.parse(action.toString)
-      console.log('here', action.socketAction)
-      const socketAction = action.socketAction;
-  
-      console.log('Websocket has received a message. Here are the contents: ', action);
-      
-      switch (socketAction) {
-        case 'middlewareConnect':
-          console.log('Frontend Has Opened Websocket in Middleware');
-  
-          if (socket === null) {
-            // Create a new WebSocket connection
-            socket = new WebSocket(wsUrl);
-            socket.onopen = onOpen(store);
-            socket.onclose = onClose(store);
-            socket.onmessage = onMessage(store);
-          }
-          break;
-        case 'updateInventoryState':
+      action = await JSON.parse(event.data)
+
+      switch (action.socketAction) {
+      case 'updateInventoryState':
               store.dispatch(updateAllProperties({properties: action.properties, status: 'success'}));
           break;
   
@@ -81,8 +56,35 @@ const websocketMiddleware = (wsUrl) => {
           break;
 
         case 'loginFailed':
-          store.dispatch(failedLogin({}));
+          store.dispatch(failedLogin());
           break;
+          default:
+            return next(action);
+    }
+    }
+    catch (err) {
+      console.log('Parsing OR Switch case error. ')
+    }
+  };
+    return (store) => (next) => (action) => {
+      console.log('Websocket Action: ', action.socketAction)
+      const socketAction = action.socketAction;
+  
+      console.log('Dispatch Middleware has received a message. Here are the contents: ', action);
+      
+      switch (socketAction) {
+        case 'middlewareConnect':
+
+          if (socket === null) {
+            // Create a new WebSocket connection
+            socket = new WebSocket(wsUrl);
+            socket.onopen = onOpen(store);
+            socket.onclose = onClose(store);
+            socket.onmessage = onMessage(store);
+          }
+          break;
+          default:
+            return next(action);
       }
     };
   };

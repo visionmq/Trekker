@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 export const propertySlice = createSlice({
   name: 'property',
@@ -17,9 +17,11 @@ export const propertySlice = createSlice({
     },
     //this will take all of the properties from Inv and store them for the listing page
     updateAllProperties: (state, action) => {
-      state.allProperties = action.properties; 
-      state.loadStatus = action.status;
-      console.log('Finished updateAllProperties. ', current.state);
+      const payload = action.payload
+      console.log('in updateAllProp', payload)
+      state.allProperties = payload.properties; 
+      state.loadStatus = payload.status;
+      console.log('Finished updateAllProperties. ', current(state));
     },
     //this will be updated when the user clicks on a single property from the listings page. We could change this later to hold an object, or we can have the component filter through the array of all properties to find a match to the title
     updatePropertyName: (state, action) => {

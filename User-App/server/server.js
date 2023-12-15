@@ -12,6 +12,7 @@ const corsOptions = {
   origin: 'http://localhost:8080',
   credentials: true,
 };
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
@@ -34,7 +35,6 @@ app.get('/inv', (req, res) => {
       properties: [],
     }
   }
-  console.log('about to send a message to inv')
   sendMsg('Inv', message); //message could be load or checkout
   res.sendStatus(200);
 });
@@ -42,8 +42,6 @@ app.get('/inv', (req, res) => {
 //rabbitMQ endpoint for testing websocket
 
 app.post('/rabbit', async (req, res) => {
-  console.log('Sending to rabbit');
-  // console.log(req.body.message);
   await sendMsg('Inv', req.body.message);
   console.log('Rabbit message sent');
   res.send();
@@ -90,7 +88,6 @@ const wsserver = new WebSocketServer({ port: 443 });
 const amqp = require('amqplib/callback_api');
 
 wsserver.on('connection', (ws) => {
-  // ws.session = { secret: 'Secret Info Here' };
   ws.on('close', () => console.log('Client has disconnected!'));
 
   ws.onerror = function (err) {
@@ -98,7 +95,7 @@ wsserver.on('connection', (ws) => {
   };
 
   console.log('Websocket connected, turning on consumer');
-  ws.send('Websocket Server working');
+  ws.send(JSON.stringify({message: 'Websocket Server working'}));
 
   const socketSend = (msgObj) => {
     console.log('in socket send: ');
@@ -107,13 +104,11 @@ wsserver.on('connection', (ws) => {
 
   const exchangeName = 'trekker_topic';
 
-  // const receiveMsg = () => {
   amqp.connect('amqp://localhost', function (error, connection) {
     if (error) console.log(error);
     console.log('Connection established for consumer');
 
     connection.createChannel(function (err, channel) {
-      // console.log('err', err, 'channel', channel);
       channel.assertExchange(exchangeName, 'topic', { durable: true });
 
       channel.assertQueue('AppQueue');
@@ -132,46 +127,55 @@ wsserver.on('connection', (ws) => {
           catch (err) {
             console.log('App server could not parse the incoming message.')
           }
+          let data;
           switch (msgObj.status) {
-            case 'inv-property-updated-app': //this probably needs to be changed
-              ws.send(JSON.stringify({socketAction: 'updateInventoryState', properties: msgObj.body.properties})); 
+            case 'inv-property-updated-app':
+              data = JSON.stringify({socketAction: 'updateInventoryState', properties: msgObj.body.properties}) //this probably needs to be changed
+              ws.send(data); 
               break;
 
             case 'inv-load-success-app':
-              const data = JSON.stringify({socketAction: 'updateInventoryState', properties: msgObj.body.properties});
-              console.log('sending properties to the websocket')
+              data = JSON.stringify({socketAction: 'updateInventoryState', properties: msgObj.body.properties});
               ws.send(data); 
               break;
             case 'inv-load-failed-app':
-              socketSend({socketAction: 'propertySearchFailed'}); 
+              data = JSON.stringify({socketAction: 'propertySearchFailed'})
+              ws.send(data); 
               break;
 
             case 'inv-preCharge-noAvail-app':
-              socketSend({socketAction: 'noAvail', properties: msgObj.body.properties})
+              data = JSON.stringify({socketAction: 'noAvail', properties: msgObj.body.properties})
+              ws.send(data);
               break;
               
             case 'bill-postCharge-success-all':
-              socketSend({socketAction: 'orderComplete', body: msgObj.body})
-            break;
+              data = JSON.stringify({socketAction: 'orderComplete', body: msgObj.body})
+              ws.send(data);
+              break;
 
             case 'bill-postCharge-failed-app':
-              socketSend({socketAction: 'billingFailed'})
+              data = JSON.stringify({socketAction: 'billingFailed'})
+              ws.send(data);
               break;
 
             case 'auth-signup-success-app': 
-              socketSend({socketAction: 'signupSuccessful', user: msgObj.user})
+              data = JSON.stringify({socketAction: 'signupSuccessful', user: msgObj.user})
+              ws.send(data);
               break;
             
             case 'auth-signup-failed-app':
-              socketSend({socketAction: 'signupFailed'})
+              data = JSON.stringify({socketAction: 'signupFailed'})
+              ws.send(data);
               break;
 
             case 'auth-login-sucess-app': 
-            socketSend({socketAction: 'loginSuccessful', user: msgObj.user})
+              data = JSON.stringify({socketAction: 'loginSuccessful', user: msgObj.user})
+              ws.send(data);
               break;
             
             case 'auth-login-failed-app':
-              socketSend({socketAction: 'loginFailed'})
+              data = JSON.stringify({socketAction: 'loginFailed'})
+              ws.send(data);
               break;
 
             default:
