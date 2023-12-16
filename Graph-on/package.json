@@ -1,0 +1,16 @@
+{
+  "name": "graph-on",
+  "version": "1.0.0",
+  "description": "graph on",
+  "scripts": {
+    "start": "NODE_ENV=production node server.js & prometheus --config.file=prometheus.yml",
+    "kill": "npx kill-port 8000"
+  },
+  "author": "Cheri, Jackson, Jake, Justin",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "express": "^4.18.2",
+    "prom-client": "^15.1.0"
+  }
+}
